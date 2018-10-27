@@ -29,6 +29,11 @@ namespace img_vector
         /// </summary>
         Image currentImage;
 
+        /// <summary>
+        /// Program settings.
+        /// </summary>
+        Settings settings;
+
         public mainForm()
         {
             InitializeComponent();
@@ -108,6 +113,23 @@ namespace img_vector
             this.currentImagePictureBox.Height = newImage.Height;
 
             this.pictureLoaded = true;
+        }
+
+        private void saveSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveDialog = new SaveFileDialog())
+            {
+                saveDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
+                if(saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    settings.saveToXMLFile(saveDialog.FileName);
+                }
+            }
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
