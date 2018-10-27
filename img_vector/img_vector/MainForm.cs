@@ -32,7 +32,7 @@ namespace img_vector
         /// <summary>
         /// Program settings.
         /// </summary>
-        Settings settings;
+        Settings settings = new Settings();
 
         public mainForm()
         {
@@ -41,6 +41,10 @@ namespace img_vector
 
         private void currentImagePictureBox_MouseClick(object sender, MouseEventArgs e)
         {
+            // When the picture box is clicked (and has an image loaded),
+            // via the left mouse button: A new point will be recorded and displayed
+            // via the right mouse button: The closest point (if one is within 5 pixels) will be removed and no longer displayed.
+
             if (pictureLoaded)
             {
                 if (e.Button == MouseButtons.Left) // Left button : Add new point
@@ -57,11 +61,16 @@ namespace img_vector
 
         private void currentImagePictureBox_Paint(object sender, PaintEventArgs e)
         {
+            // This function paints all the vector points, lines, and vector area shading.
+
             if (pictureLoaded)
             {
-                Pen point_border_pen = new Pen(Color.Black);
-                Pen point_inner_pen = new Pen(Color.Red);
-                Brush inner_shade_brush = new SolidBrush(Color.Purple);
+                Pen point_border_pen = new Pen(settings.pointOuterColor); // Color of the border of a point
+                Pen point_inner_pen = new Pen(settings.pointInnerColor); // Color of the inside of a point
+
+                Pen vector_line_pen = new Pen(settings.lineColor); // Color of a line
+
+                Brush inner_shade_brush = new SolidBrush(settings.shadingColor); // Color of the shading inside of the area defined by the vector
 
                 GraphicsPath path = new GraphicsPath();
                 for(int i=0; i<vectors.Count; i++)
@@ -72,14 +81,14 @@ namespace img_vector
                     if(i!=0)
                     {
                         e.Graphics.DrawLine(point_border_pen, p, vectors[i - 1]);
-                        path.AddLine(p, vectors[i - 1]);
+                        path.AddLine(vectors[i - 1], p);
                     }
                 }
 
                 if(vectors.Count >= 3)
                 {
                     e.Graphics.DrawLine(point_border_pen, vectors.Last(), vectors.First());
-                    path.AddLine(vectors.Last(), vectors.First());
+                    path.CloseFigure();
 
                     e.Graphics.FillPath(inner_shade_brush, path);
                 }
@@ -104,15 +113,22 @@ namespace img_vector
             }
         }
 
+        /// <summary>
+        /// Loads a new image into the picture box.
+        /// </summary>
+        /// <param name="newImage">New image to be displayed via the picture box.
+        /// </param>
         private void LoadImage(Image newImage)
         {
-            this.currentImage = newImage;
-            this.currentImagePictureBox.Image = this.currentImage;
+            this.vectors.Clear(); // Clear all points added, if any.
 
-            this.currentImagePictureBox.Width = newImage.Width;
+            this.currentImage = newImage; // Set the current image known as being displayed
+            this.currentImagePictureBox.Image = this.currentImage; // Show the new image
+
+            this.currentImagePictureBox.Width = newImage.Width; // Set the size of the picture box.
             this.currentImagePictureBox.Height = newImage.Height;
 
-            this.pictureLoaded = true;
+            this.pictureLoaded = true; // Set a variable indicating a picture has been loaded.
         }
 
         private void saveSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -127,9 +143,35 @@ namespace img_vector
             }
         }
 
+        private void openSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openDialog = new OpenFileDialog())
+            {
+                openDialog.Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
+                if(openDialog.ShowDialog() == DialogResult.OK)
+                {
+                    this.settings = Settings.fromFilepath(openDialog.FileName);
+                    currentImagePictureBox.Refresh();
+                }
+            }
+        }
+
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            using (SettingsForm settingsForm = new SettingsForm(this.settings))
+            {
+                if(settingsForm.ShowDialog() == DialogResult.OK)
+                {
+                    this.settings = settingsForm.Settings;
+                    currentImagePictureBox.Refresh();
+                }
+            }
+        }
 
+        private void resetPointsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.vectors.Clear(); // Clear all added points.
+            this.currentImagePictureBox.Refresh();
         }
     }
 }

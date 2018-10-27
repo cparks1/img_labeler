@@ -10,12 +10,17 @@ using System.Xml.Serialization;
 
 namespace img_vector
 {
-    class Settings
+    public class Settings
     {
         /// <summary>
-        /// Color of each point added by the user.
+        /// Color of the outer (border) portion of each point added by the user.
         /// </summary>
-        public Color pointColor;
+        public Color pointOuterColor;
+
+        /// <summary>
+        /// Color of the inner portion of each point added by the user.
+        /// </summary>
+        public Color pointInnerColor;
 
         /// <summary>
         /// Color of each line drawn inbetween points.
@@ -32,9 +37,18 @@ namespace img_vector
         /// </summary>
         public Settings()
         {
-            pointColor = Color.Black;
-            lineColor = Color.Black;
-            shadingColor = Color.Purple;
+            pointOuterColor = Color.Black; // Point border color solid black by default
+            pointInnerColor = Color.Transparent; // Point inner color transparent by default
+            lineColor = Color.Black; // Lines defining vector color solid black by default
+            shadingColor = Color.FromArgb(128, Color.Purple); // Vector shading color half opaque purple by default
+        }
+
+        public Settings(Color PointOuterColor, Color PointInnerColor, Color LineColor, Color ShadingColor)
+        {
+            this.pointOuterColor = PointOuterColor;
+            this.pointInnerColor = PointInnerColor;
+            this.lineColor = LineColor;
+            this.shadingColor = ShadingColor;
         }
 
         /// <summary>
@@ -50,7 +64,7 @@ namespace img_vector
             Settings loaded_settings = serializer.Deserialize(writer) as Settings;
 
             // Load the settings
-            this.pointColor = loaded_settings.pointColor;
+            this.pointOuterColor = loaded_settings.pointOuterColor;
             this.lineColor = loaded_settings.lineColor;
             this.shadingColor = loaded_settings.shadingColor;
         }
