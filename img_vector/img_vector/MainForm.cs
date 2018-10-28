@@ -49,35 +49,53 @@ namespace img_vector
             {
                 if (e.Button == MouseButtons.Left) // Left button : Add new point
                 {
-                    vectorPoints.Add(new Point(e.X, e.Y));
-                    currentImagePictureBox.Refresh();
+                    if (!CursorIsInAnyPoint(e.X, e.Y)) // Don't add a new point if we're already inside of one.
+                    {
+                        vectorPoints.Add(new Point(e.X, e.Y));
+                    }
                 }
                 else if(e.Button == MouseButtons.Right) // Right button : Delete closest point if a point is within a certain radius
                 {
-
+                    int index = vectorPoints.FindIndex(point => CursorIsInPoint(point, e.X, e.Y));
+                    if (index > -1) // The cursor is actually in a point
+                    {
+                        vectorPoints.RemoveAt(index);
+                    }
                 }
+
+                currentImagePictureBox.Refresh();
             }
         }
 
-        private bool CursorIsInPoint(int X, int Y)
+        private bool CursorIsInPoint(Point p, int cursor_x, int cursor_y)
+        {
+            if (settings.pointRepresentationType == PointRepresentationType.TopLeft)
+            {
+                if (cursor_x >= p.X && cursor_x <= p.X + settings.pointSize &&
+                   cursor_y >= p.Y && cursor_y <= p.Y + settings.pointSize)
+                {
+                    return true;
+                }
+            }
+            else if (settings.pointRepresentationType == PointRepresentationType.Centered)
+            {
+                if (cursor_x >= p.X - settings.pointSize / 2 && cursor_x <= p.X + settings.pointSize / 2 &&
+                   cursor_y >= p.Y - settings.pointSize / 2 && cursor_y <= p.Y + settings.pointSize / 2)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool CursorIsInAnyPoint(int X, int Y)
         {
             foreach(Point p in vectorPoints)
             {
-                if (settings.pointRepresentationType == PointRepresentationType.TopLeft)
+                if(CursorIsInPoint(p, X, Y))
                 {
-                    if (X >= p.X && X <= p.X + settings.pointSize &&
-                       Y >= p.Y && Y <= p.Y + settings.pointSize)
-                    {
-                        return true;
-                    }
-                }
-                else if(settings.pointRepresentationType == PointRepresentationType.Centered)
-                {
-                    if(X >= p.X - settings.pointSize/2 && X <= p.X + settings.pointSize/2 && 
-                       Y >= p.Y - settings.pointSize/2 && Y <= p.Y + settings.pointSize/2)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
             return false;
@@ -86,7 +104,7 @@ namespace img_vector
         private void currentImagePictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             // If the mouse is on (within) a point, change the cursor to a finger.
-            if(CursorIsInPoint(e.X, e.Y))
+            if(CursorIsInAnyPoint(e.X, e.Y))
             {
                 Cursor.Current = Cursors.Hand;
             }
