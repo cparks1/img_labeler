@@ -22,7 +22,7 @@ namespace img_vector
         /// <summary>
         /// List of all current vectors.
         /// </summary>
-        List<Point> vectors = new List<Point>();
+        List<Point> vectorPoints = new List<Point>();
 
         /// <summary>
         /// Current image being vectored.
@@ -49,13 +49,50 @@ namespace img_vector
             {
                 if (e.Button == MouseButtons.Left) // Left button : Add new point
                 {
-                    vectors.Add(new Point(e.X, e.Y));
+                    vectorPoints.Add(new Point(e.X, e.Y));
                     currentImagePictureBox.Refresh();
                 }
                 else if(e.Button == MouseButtons.Right) // Right button : Delete closest point if a point is within a certain radius
                 {
 
                 }
+            }
+        }
+
+        private bool CursorIsInPoint(int X, int Y)
+        {
+            foreach(Point p in vectorPoints)
+            {
+                if (settings.pointRepresentationType == PointRepresentationType.TopLeft)
+                {
+                    if (X >= p.X && X <= p.X + settings.pointSize &&
+                       Y >= p.Y && Y <= p.Y + settings.pointSize)
+                    {
+                        return true;
+                    }
+                }
+                else if(settings.pointRepresentationType == PointRepresentationType.Centered)
+                {
+                    if(X >= p.X - settings.pointSize/2 && X <= p.X + settings.pointSize/2 && 
+                       Y >= p.Y - settings.pointSize/2 && Y <= p.Y + settings.pointSize/2)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void currentImagePictureBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            // If the mouse is on (within) a point, change the cursor to a finger.
+            if(CursorIsInPoint(e.X, e.Y))
+            {
+                Cursor.Current = Cursors.Hand;
+            }
+            else
+            {
+                Cursor.Current = Cursors.Arrow;
             }
         }
 
@@ -73,24 +110,34 @@ namespace img_vector
                 Brush inner_shade_brush = new SolidBrush(settings.shadingColor); // Color of the shading inside of the area defined by the vector
 
                 GraphicsPath path = new GraphicsPath();
-                for(int i=0; i<vectors.Count; i++)
+                for(int i=0; i<vectorPoints.Count; i++)
                 {
-                    Point p = vectors[i];
-                    e.Graphics.DrawRectangle(point_border_pen, new Rectangle(p.X, p.Y, 2, 2));
+                    Point p = vectorPoints[i]; // Get the point
 
-                    if(i!=0)
+                    int x = p.X; // Default to top left representation
+                    int y = p.Y;
+
+                    if(settings.pointRepresentationType == PointRepresentationType.Centered) // Unless settings dictate the representation being centered around the click point
                     {
-                        e.Graphics.DrawLine(point_border_pen, p, vectors[i - 1]);
-                        path.AddLine(vectors[i - 1], p);
+                        x = p.X - settings.pointSize / 2;
+                        y = p.Y - settings.pointSize / 2;
+                    }
+
+                    e.Graphics.DrawRectangle(point_border_pen, x, y, settings.pointSize, settings.pointSize); // Draw the point representation
+
+                    if (i!=0)
+                    {
+                        e.Graphics.DrawLine(point_border_pen, p, vectorPoints[i - 1]); // If this is a point besides the first one, draw a line representing the vector created
+                        path.AddLine(vectorPoints[i - 1], p); // Add the point to the graphics path so a vector area can be defined
                     }
                 }
 
-                if(vectors.Count >= 3)
+                if(vectorPoints.Count >= 3) // If a vector area can be defined
                 {
-                    e.Graphics.DrawLine(point_border_pen, vectors.Last(), vectors.First());
-                    path.CloseFigure();
+                    e.Graphics.DrawLine(point_border_pen, vectorPoints.Last(), vectorPoints.First()); // Draw a line closing the vector
+                    path.CloseFigure(); // Close the vector in the graphics path
 
-                    e.Graphics.FillPath(inner_shade_brush, path);
+                    e.Graphics.FillPath(inner_shade_brush, path); // Shade the vector area
                 }
             }
         }
@@ -120,7 +167,7 @@ namespace img_vector
         /// </param>
         private void LoadImage(Image newImage)
         {
-            this.vectors.Clear(); // Clear all points added, if any.
+            this.vectorPoints.Clear(); // Clear all points added, if any.
 
             this.currentImage = newImage; // Set the current image known as being displayed
             this.currentImagePictureBox.Image = this.currentImage; // Show the new image
@@ -170,7 +217,7 @@ namespace img_vector
 
         private void resetPointsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.vectors.Clear(); // Clear all added points.
+            this.vectorPoints.Clear(); // Clear all added points.
             this.currentImagePictureBox.Refresh();
         }
     }

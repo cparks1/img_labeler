@@ -33,14 +33,14 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.currentImagePictureBox = new System.Windows.Forms.PictureBox();
-            this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetPointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeLastPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.currentImagePictureBox = new System.Windows.Forms.PictureBox();
             this.mainFormMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currentImagePictureBox)).BeginInit();
             this.SuspendLayout();
@@ -73,60 +73,50 @@
             this.directoryToolStripMenuItem,
             this.openSettingsToolStripMenuItem});
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.openToolStripMenuItem.Text = "Open";
             // 
             // imageToolStripMenuItem
             // 
             this.imageToolStripMenuItem.Name = "imageToolStripMenuItem";
-            this.imageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.imageToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.imageToolStripMenuItem.Text = "Image";
             this.imageToolStripMenuItem.Click += new System.EventHandler(this.imageToolStripMenuItem_Click);
             // 
             // directoryToolStripMenuItem
             // 
             this.directoryToolStripMenuItem.Name = "directoryToolStripMenuItem";
-            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.directoryToolStripMenuItem.Text = "Directory";
+            // 
+            // openSettingsToolStripMenuItem
+            // 
+            this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
+            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.openSettingsToolStripMenuItem.Text = "Settings";
+            this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.openSettingsToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveSettingsToolStripMenuItem});
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.saveToolStripMenuItem.Text = "Save";
             // 
             // saveSettingsToolStripMenuItem
             // 
             this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
-            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.saveSettingsToolStripMenuItem.Text = "Settings";
             this.saveSettingsToolStripMenuItem.Click += new System.EventHandler(this.saveSettingsToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // currentImagePictureBox
-            // 
-            this.currentImagePictureBox.Location = new System.Drawing.Point(0, 27);
-            this.currentImagePictureBox.Name = "currentImagePictureBox";
-            this.currentImagePictureBox.Size = new System.Drawing.Size(800, 423);
-            this.currentImagePictureBox.TabIndex = 1;
-            this.currentImagePictureBox.TabStop = false;
-            this.currentImagePictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.currentImagePictureBox_Paint);
-            this.currentImagePictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.currentImagePictureBox_MouseClick);
-            // 
-            // openSettingsToolStripMenuItem
-            // 
-            this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
-            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openSettingsToolStripMenuItem.Text = "Settings";
-            this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.openSettingsToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -140,15 +130,26 @@
             // resetPointsToolStripMenuItem
             // 
             this.resetPointsToolStripMenuItem.Name = "resetPointsToolStripMenuItem";
-            this.resetPointsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetPointsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.resetPointsToolStripMenuItem.Text = "Reset points";
             this.resetPointsToolStripMenuItem.Click += new System.EventHandler(this.resetPointsToolStripMenuItem_Click);
             // 
             // removeLastPointToolStripMenuItem
             // 
             this.removeLastPointToolStripMenuItem.Name = "removeLastPointToolStripMenuItem";
-            this.removeLastPointToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.removeLastPointToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.removeLastPointToolStripMenuItem.Text = "Remove last point";
+            // 
+            // currentImagePictureBox
+            // 
+            this.currentImagePictureBox.Location = new System.Drawing.Point(0, 27);
+            this.currentImagePictureBox.Name = "currentImagePictureBox";
+            this.currentImagePictureBox.Size = new System.Drawing.Size(800, 423);
+            this.currentImagePictureBox.TabIndex = 1;
+            this.currentImagePictureBox.TabStop = false;
+            this.currentImagePictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.currentImagePictureBox_Paint);
+            this.currentImagePictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.currentImagePictureBox_MouseClick);
+            this.currentImagePictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.currentImagePictureBox_MouseMove);
             // 
             // mainForm
             // 

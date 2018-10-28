@@ -10,6 +10,19 @@ using System.Xml.Serialization;
 
 namespace img_vector
 {
+    public enum PointRepresentationType
+    {
+        /// <summary>
+        /// The square representing the point starts at the top left
+        /// </summary>
+        TopLeft,
+
+        /// <summary>
+        /// The square representing the point is centered around the point
+        /// </summary>
+        Centered
+    }
+
     public class Settings
     {
         /// <summary>
@@ -23,6 +36,11 @@ namespace img_vector
         public Color pointInnerColor;
 
         /// <summary>
+        /// How the square representation of the point should be drawn in relation to the point location.
+        /// </summary>
+        public PointRepresentationType pointRepresentationType = PointRepresentationType.Centered;
+
+        /// <summary>
         /// Color of each line drawn inbetween points.
         /// </summary>
         public Color lineColor;
@@ -31,6 +49,11 @@ namespace img_vector
         /// Color of the shading inbetween all of the points.
         /// </summary>
         public Color shadingColor;
+
+        /// <summary>
+        /// Size (width & length) of the square representation of each point added by the user.
+        /// </summary>
+        public int pointSize = 4;
 
         /// <summary>
         /// Default settings instantiation object that sets the default settings.
