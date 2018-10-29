@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -66,12 +67,14 @@ namespace img_vector
             shadingColor = Color.FromArgb(128, Color.Purple); // Vector shading color half opaque purple by default
         }
 
-        public Settings(Color PointOuterColor, Color PointInnerColor, Color LineColor, Color ShadingColor)
+        public Settings(Color PointOuterColor, Color PointInnerColor, Color LineColor, Color ShadingColor, int PointSize, PointRepresentationType RepresentationType)
         {
             this.pointOuterColor = PointOuterColor;
             this.pointInnerColor = PointInnerColor;
             this.lineColor = LineColor;
             this.shadingColor = ShadingColor;
+            this.pointSize = PointSize;
+            this.pointRepresentationType = RepresentationType;
         }
 
         /// <summary>

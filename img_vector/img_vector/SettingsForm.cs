@@ -82,11 +82,51 @@ namespace img_vector
             }
         }
 
+        public int PointSize
+        {
+            get
+            {
+                return (int)pointSizeSelector.Value;
+            }
+            set
+            {
+                pointSizeSelector.Value = value;
+            }
+        }
+
+        public PointRepresentationType PointRepresentationType
+        {
+            get
+            {
+                if(PointRepresentationType.TryParse(pointCenterTypeSelector.SelectedText.Replace(" ", ""), out PointRepresentationType representationType))
+                {
+                    return representationType;
+                }
+                else
+                {
+                    return PointRepresentationType.TopLeft;
+                }
+            }
+            set
+            {
+                string enum_string = value.ToString();
+                string user_representation_of_string = "";
+
+                for (int i = 0; i < enum_string.Length; i++)
+                {
+                    char c = enum_string[i];
+                    user_representation_of_string += (char.IsUpper(c) && i != 0 ? " " + c : "" + c); // If it's an uppercase letter, add a space before it, so "TopLeft" becomes "Top Left"
+                }
+
+                pointCenterTypeSelector.SelectedIndex = pointCenterTypeSelector.FindStringExact(user_representation_of_string);
+            }
+        }
+
         public Settings Settings
         {
             get
             {
-                return new Settings(PointBorderColor, PointInnerColor, VectorLineColor, VectorShadingColor);
+                return new Settings(PointBorderColor, PointInnerColor, VectorLineColor, VectorShadingColor, PointSize, PointRepresentationType);
             }
             set
             {
@@ -94,6 +134,8 @@ namespace img_vector
                 PointBorderColor = value.pointOuterColor;
                 VectorLineColor = value.lineColor;
                 VectorShadingColor = value.shadingColor;
+                PointSize = value.pointSize;
+                PointRepresentationType = value.pointRepresentationType;
             }
         }
 

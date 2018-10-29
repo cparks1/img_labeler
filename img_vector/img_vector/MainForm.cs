@@ -21,6 +21,16 @@ namespace img_vector
         bool pictureLoaded = false;
 
         /// <summary>
+        /// List of all current vectors created for this image.
+        /// </summary>
+        List<List<Point>> vectors = new List<List<Point>>();
+
+        /// <summary>
+        /// Index of the vector currently being worked on.
+        /// </summary>
+        int currentVectorIndex;
+
+        /// <summary>
         /// List of all current vectors.
         /// </summary>
         List<Point> vectorPoints = new List<Point>();
