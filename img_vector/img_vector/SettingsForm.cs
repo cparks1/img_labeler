@@ -94,7 +94,7 @@ namespace img_vector
             }
         }
 
-        public PointRepresentationType PointRepresentationType
+        public PointRepresentationType PointCenterType
         {
             get
             {
@@ -126,7 +126,7 @@ namespace img_vector
         {
             get
             {
-                return new Settings(PointBorderColor, PointInnerColor, VectorLineColor, VectorShadingColor, PointSize, PointRepresentationType);
+                return new Settings(PointBorderColor, PointInnerColor, VectorLineColor, VectorShadingColor, PointSize, PointCenterType);
             }
             set
             {
@@ -135,7 +135,7 @@ namespace img_vector
                 VectorLineColor = value.lineColor;
                 VectorShadingColor = value.shadingColor;
                 PointSize = value.pointSize;
-                PointRepresentationType = value.pointRepresentationType;
+                PointCenterType = value.pointRepresentationType;
             }
         }
 
