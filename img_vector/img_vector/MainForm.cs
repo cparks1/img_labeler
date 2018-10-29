@@ -21,19 +21,14 @@ namespace img_vector
         bool pictureLoaded = false;
 
         /// <summary>
-        /// List of all current vectors created for this image.
+        /// List of all vectors created for this image.
         /// </summary>
-        List<List<Point>> vectors = new List<List<Point>>();
+        List<Vector> vectors = new List<Vector>();
 
         /// <summary>
         /// Index of the vector currently being worked on.
         /// </summary>
-        int currentVectorIndex;
-
-        /// <summary>
-        /// List of all current vectors.
-        /// </summary>
-        List<Point> vectorPoints = new List<Point>();
+        int currentVectorIndex = 0;
 
         /// <summary>
         /// Current image being vectored.
@@ -62,15 +57,15 @@ namespace img_vector
                 {
                     if (!CursorIsInAnyPoint(e.X, e.Y)) // Don't add a new point if we're already inside of one.
                     {
-                        vectorPoints.Add(new Point(e.X, e.Y));
+                        vectors[currentVectorIndex].points.Add(new Point(e.X, e.Y));
                     }
                 }
                 else if(e.Button == MouseButtons.Right) // Right button : Delete closest point if a point is within a certain radius
                 {
-                    int index = vectorPoints.FindIndex(point => CursorIsInPoint(point, e.X, e.Y));
+                    int index = vectors[currentVectorIndex].points.FindIndex(point => CursorIsInPoint(point, e.X, e.Y));
                     if (index > -1) // The cursor is actually in a point
                     {
-                        vectorPoints.RemoveAt(index);
+                        vectors[currentVectorIndex].points.RemoveAt(index);
                     }
                 }
 
@@ -102,11 +97,14 @@ namespace img_vector
 
         private bool CursorIsInAnyPoint(int X, int Y)
         {
-            foreach(Point p in vectorPoints)
+            foreach(Vector v in vectors) // TODO: Optimize this O(n^2) loop
             {
-                if(CursorIsInPoint(p, X, Y))
+                foreach(Point p in v.points)
                 {
-                    return true;
+                    if (CursorIsInPoint(p, X, Y))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -131,42 +129,9 @@ namespace img_vector
 
             if (pictureLoaded)
             {
-                Pen point_border_pen = new Pen(settings.pointOuterColor); // Color of the border of a point
-                Pen point_inner_pen = new Pen(settings.pointInnerColor); // Color of the inside of a point
-
-                Pen vector_line_pen = new Pen(settings.lineColor); // Color of a line
-
-                Brush inner_shade_brush = new SolidBrush(settings.shadingColor); // Color of the shading inside of the area defined by the vector
-
-                GraphicsPath path = new GraphicsPath();
-                for(int i=0; i<vectorPoints.Count; i++)
+                foreach(Vector v in vectors)
                 {
-                    Point p = vectorPoints[i]; // Get the point
-
-                    int x = p.X; // Default to top left representation
-                    int y = p.Y;
-
-                    if(settings.pointRepresentationType == PointRepresentationType.Centered) // Unless settings dictate the representation being centered around the click point
-                    {
-                        x = p.X - settings.pointSize / 2;
-                        y = p.Y - settings.pointSize / 2;
-                    }
-
-                    e.Graphics.DrawRectangle(point_border_pen, x, y, settings.pointSize, settings.pointSize); // Draw the point representation
-
-                    if (i!=0)
-                    {
-                        e.Graphics.DrawLine(point_border_pen, p, vectorPoints[i - 1]); // If this is a point besides the first one, draw a line representing the vector created
-                        path.AddLine(vectorPoints[i - 1], p); // Add the point to the graphics path so a vector area can be defined
-                    }
-                }
-
-                if(vectorPoints.Count >= 3) // If a vector area can be defined
-                {
-                    e.Graphics.DrawLine(point_border_pen, vectorPoints.Last(), vectorPoints.First()); // Draw a line closing the vector
-                    path.CloseFigure(); // Close the vector in the graphics path
-
-                    e.Graphics.FillPath(inner_shade_brush, path); // Shade the vector area
+                    v.DrawVector(settings, e.Graphics);
                 }
             }
         }
@@ -204,7 +169,9 @@ namespace img_vector
         /// </param>
         private void LoadImage(Image newImage)
         {
-            this.vectorPoints.Clear(); // Clear all points added, if any.
+            this.vectors.Clear();
+            this.vectors.Add(new Vector()); // Add a blank vector at index 0.
+            this.currentVectorIndex = 0;
 
             this.currentImage = newImage; // Set the current image known as being displayed
             this.currentImagePictureBox.Image = this.currentImage; // Show the new image
@@ -254,7 +221,11 @@ namespace img_vector
 
         private void resetPointsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.vectorPoints.Clear(); // Clear all added points.
+            // Clear all added points.
+            this.vectors.Clear();
+            this.vectors.Add(new Vector());
+            this.currentVectorIndex = 0;
+
             this.currentImagePictureBox.Refresh();
         }
 
