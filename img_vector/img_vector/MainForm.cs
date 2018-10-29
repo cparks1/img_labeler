@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -164,6 +165,14 @@ namespace img_vector
         {
             using (OpenFileDialog fileDialog = new OpenFileDialog())
             {
+                fileDialog.Filter = "Bitmaps|*.bmp|" +
+                                    "PNG files|*.png|" +
+                                    "JPEG files|*.jpg|" +
+                                    "GIF files|*.gif|" +
+                                    "TIFF files|*.tif|" +
+                                    "Image files|*.bmp;*.jpg;*.gif;*.png;*.tif|" +
+                                    "All files|*.*";
+
                 if(fileDialog.ShowDialog() == DialogResult.OK)
                 {
                     try
@@ -237,6 +246,37 @@ namespace img_vector
         {
             this.vectorPoints.Clear(); // Clear all added points.
             this.currentImagePictureBox.Refresh();
+        }
+
+        private void mainForm_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void mainForm_DragDrop(object sender, DragEventArgs e)
+        {
+            string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
+            switch(Path.GetExtension(file).ToLower())
+            {
+                case ".xml":
+                    this.settings = Settings.fromFilepath(file);
+                    break;
+                case ".jpg":
+                case ".jpeg":
+                case ".png":
+                case ".bmp":
+                case ".gif":
+                case ".tif":
+                    LoadImage(new Bitmap(file));
+                    break;
+            }
         }
     }
 }

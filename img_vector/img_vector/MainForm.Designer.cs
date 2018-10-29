@@ -39,7 +39,6 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetPointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.removeLastPointToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentImagePictureBox = new System.Windows.Forms.PictureBox();
             this.mainFormMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currentImagePictureBox)).BeginInit();
@@ -121,8 +120,7 @@
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.resetPointsToolStripMenuItem,
-            this.removeLastPointToolStripMenuItem});
+            this.resetPointsToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -133,12 +131,6 @@
             this.resetPointsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
             this.resetPointsToolStripMenuItem.Text = "Reset points";
             this.resetPointsToolStripMenuItem.Click += new System.EventHandler(this.resetPointsToolStripMenuItem_Click);
-            // 
-            // removeLastPointToolStripMenuItem
-            // 
-            this.removeLastPointToolStripMenuItem.Name = "removeLastPointToolStripMenuItem";
-            this.removeLastPointToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.removeLastPointToolStripMenuItem.Text = "Remove last point";
             // 
             // currentImagePictureBox
             // 
@@ -153,6 +145,7 @@
             // 
             // mainForm
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
@@ -162,6 +155,8 @@
             this.MainMenuStrip = this.mainFormMenuStrip;
             this.Name = "mainForm";
             this.Text = "Image Vector";
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.mainForm_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.mainForm_DragEnter);
             this.mainFormMenuStrip.ResumeLayout(false);
             this.mainFormMenuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currentImagePictureBox)).EndInit();
@@ -184,7 +179,6 @@
         private System.Windows.Forms.ToolStripMenuItem openSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetPointsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem removeLastPointToolStripMenuItem;
     }
 }
 
