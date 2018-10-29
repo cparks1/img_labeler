@@ -70,5 +70,10 @@ namespace img_vector
         {
             points = new List<Point>();
         }
+
+        public Vector(string vectorClassification) : this()
+        {
+            this.classification = vectorClassification;
+        }
     }
 }

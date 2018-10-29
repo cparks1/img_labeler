@@ -170,8 +170,15 @@ namespace img_vector
         private void LoadImage(Image newImage)
         {
             this.vectors.Clear();
-            this.vectors.Add(new Vector()); // Add a blank vector at index 0.
             this.currentVectorIndex = 0;
+
+            using (ClassificationQueryForm classificationQuery = new ClassificationQueryForm(CancelEnabled: false))
+            {
+                if (classificationQuery.ShowDialog() == DialogResult.OK)
+                {
+                    this.vectors.Add(new Vector(classificationQuery.Classification));
+                }
+            }
 
             this.currentImage = newImage; // Set the current image known as being displayed
             this.currentImagePictureBox.Image = this.currentImage; // Show the new image
@@ -257,6 +264,49 @@ namespace img_vector
                 case ".tif":
                     LoadImage(new Bitmap(file));
                     break;
+            }
+        }
+
+        private void AddNewVector()
+        {
+            if (pictureLoaded)
+            {
+                if (vectors.Count > 0)
+                {
+                    if (vectors[currentVectorIndex].points.Count > 0)
+                    {
+                        using (ClassificationQueryForm classificationQuery = new ClassificationQueryForm())
+                        {
+                            classificationQuery.Classification = vectors[currentVectorIndex].classification;
+                            if (classificationQuery.ShowDialog() == DialogResult.OK)
+                            {
+                                vectors.Add(new Vector(classificationQuery.Classification));
+                                currentVectorIndex = vectors.Count - 1;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Your current vector is blank. You must add some points before creating a new vector.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("You must load an image before creating a vector.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void newVectorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddNewVector();
+        }
+
+        private void mainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Control && e.KeyCode == Keys.N) // New vector
+            {
+                AddNewVector();
             }
         }
     }

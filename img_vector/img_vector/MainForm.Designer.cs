@@ -40,6 +40,7 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetPointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentImagePictureBox = new System.Windows.Forms.PictureBox();
+            this.newVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainFormMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currentImagePictureBox)).BeginInit();
             this.SuspendLayout();
@@ -58,6 +59,7 @@
             // mainFormMenuStrip_FileItem
             // 
             this.mainFormMenuStrip_FileItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newVectorToolStripMenuItem,
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.settingsToolStripMenuItem});
@@ -72,7 +74,7 @@
             this.directoryToolStripMenuItem,
             this.openSettingsToolStripMenuItem});
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openToolStripMenuItem.Text = "Open";
             // 
             // imageToolStripMenuItem
@@ -100,7 +102,7 @@
             this.saveToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveSettingsToolStripMenuItem});
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "Save";
             // 
             // saveSettingsToolStripMenuItem
@@ -113,7 +115,7 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -128,7 +130,7 @@
             // resetPointsToolStripMenuItem
             // 
             this.resetPointsToolStripMenuItem.Name = "resetPointsToolStripMenuItem";
-            this.resetPointsToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.resetPointsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.resetPointsToolStripMenuItem.Text = "Reset points";
             this.resetPointsToolStripMenuItem.Click += new System.EventHandler(this.resetPointsToolStripMenuItem_Click);
             // 
@@ -143,6 +145,13 @@
             this.currentImagePictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.currentImagePictureBox_MouseClick);
             this.currentImagePictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.currentImagePictureBox_MouseMove);
             // 
+            // newVectorToolStripMenuItem
+            // 
+            this.newVectorToolStripMenuItem.Name = "newVectorToolStripMenuItem";
+            this.newVectorToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.newVectorToolStripMenuItem.Text = "New Vector (Ctrl + N)";
+            this.newVectorToolStripMenuItem.Click += new System.EventHandler(this.newVectorToolStripMenuItem_Click);
+            // 
             // mainForm
             // 
             this.AllowDrop = true;
@@ -152,11 +161,13 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.currentImagePictureBox);
             this.Controls.Add(this.mainFormMenuStrip);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.mainFormMenuStrip;
             this.Name = "mainForm";
             this.Text = "Image Vector";
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.mainForm_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.mainForm_DragEnter);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.mainForm_KeyDown);
             this.mainFormMenuStrip.ResumeLayout(false);
             this.mainFormMenuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currentImagePictureBox)).EndInit();
@@ -179,6 +190,7 @@
         private System.Windows.Forms.ToolStripMenuItem openSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetPointsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newVectorToolStripMenuItem;
     }
 }
 

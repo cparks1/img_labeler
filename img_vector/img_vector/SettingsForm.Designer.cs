@@ -677,7 +677,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(801, 581);
+            this.ClientSize = new System.Drawing.Size(442, 295);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.applyButton);
             this.Controls.Add(this.pointSettingsGroupBox);
