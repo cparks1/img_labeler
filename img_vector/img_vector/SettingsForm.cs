@@ -98,7 +98,7 @@ namespace img_vector
         {
             get
             {
-                if(PointRepresentationType.TryParse(pointCenterTypeSelector.SelectedText.Replace(" ", ""), out PointRepresentationType representationType))
+                if(PointRepresentationType.TryParse(pointCenterTypeSelector.SelectedItem.ToString().Replace(" ", ""), out PointRepresentationType representationType))
                 {
                     return representationType;
                 }
