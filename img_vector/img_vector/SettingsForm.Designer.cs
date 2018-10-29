@@ -29,6 +29,12 @@
         private void InitializeComponent()
         {
             this.pointSettingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.pointSizeRepresentationBox = new System.Windows.Forms.PictureBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.pointSizeSelector = new System.Windows.Forms.NumericUpDown();
+            this.pointCenterTypeSelector = new System.Windows.Forms.ComboBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.vectorShadingColorBox = new System.Windows.Forms.PictureBox();
             this.vectorLineColorBox = new System.Windows.Forms.PictureBox();
             this.pointInnerColorBox = new System.Windows.Forms.PictureBox();
@@ -71,13 +77,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.applyButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.pointCenterTypeSelector = new System.Windows.Forms.ComboBox();
-            this.pointSizeSelector = new System.Windows.Forms.NumericUpDown();
-            this.label23 = new System.Windows.Forms.Label();
-            this.pointSizeRepresentationBox = new System.Windows.Forms.PictureBox();
             this.pointSettingsGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pointSizeRepresentationBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pointSizeSelector)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vectorShadingColorBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vectorLineColorBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointInnerColorBox)).BeginInit();
@@ -98,8 +100,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pointBorderColorBlueLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointBorderColorGreenLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointBorderColorRedLevel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pointSizeSelector)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pointSizeRepresentationBox)).BeginInit();
             this.SuspendLayout();
             // 
             // pointSettingsGroupBox
@@ -156,6 +156,76 @@
             this.pointSettingsGroupBox.TabIndex = 0;
             this.pointSettingsGroupBox.TabStop = false;
             this.pointSettingsGroupBox.Text = "Point Settings";
+            // 
+            // pointSizeRepresentationBox
+            // 
+            this.pointSizeRepresentationBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pointSizeRepresentationBox.Location = new System.Drawing.Point(371, 16);
+            this.pointSizeRepresentationBox.Name = "pointSizeRepresentationBox";
+            this.pointSizeRepresentationBox.Size = new System.Drawing.Size(31, 20);
+            this.pointSizeRepresentationBox.TabIndex = 45;
+            this.pointSizeRepresentationBox.TabStop = false;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(323, 18);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(18, 13);
+            this.label23.TabIndex = 44;
+            this.label23.Text = "px";
+            // 
+            // pointSizeSelector
+            // 
+            this.pointSizeSelector.Location = new System.Drawing.Point(122, 16);
+            this.pointSizeSelector.Maximum = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            this.pointSizeSelector.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.pointSizeSelector.Name = "pointSizeSelector";
+            this.pointSizeSelector.Size = new System.Drawing.Size(195, 20);
+            this.pointSizeSelector.TabIndex = 43;
+            this.pointSizeSelector.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.pointSizeSelector.ValueChanged += new System.EventHandler(this.pointSizeSelector_ValueChanged);
+            // 
+            // pointCenterTypeSelector
+            // 
+            this.pointCenterTypeSelector.FormattingEnabled = true;
+            this.pointCenterTypeSelector.Items.AddRange(new object[] {
+            "Top Left",
+            "Centered"});
+            this.pointCenterTypeSelector.Location = new System.Drawing.Point(122, 40);
+            this.pointCenterTypeSelector.Name = "pointCenterTypeSelector";
+            this.pointCenterTypeSelector.Size = new System.Drawing.Size(280, 21);
+            this.pointCenterTypeSelector.TabIndex = 42;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(6, 40);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(92, 13);
+            this.label22.TabIndex = 41;
+            this.label22.Text = "Point Center Type";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(6, 16);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(54, 13);
+            this.label21.TabIndex = 40;
+            this.label21.Text = "Point Size";
             // 
             // vectorShadingColorBox
             // 
@@ -601,60 +671,6 @@
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(6, 16);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(54, 13);
-            this.label21.TabIndex = 40;
-            this.label21.Text = "Point Size";
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(6, 40);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(92, 13);
-            this.label22.TabIndex = 41;
-            this.label22.Text = "Point Center Type";
-            // 
-            // pointCenterTypeSelector
-            // 
-            this.pointCenterTypeSelector.FormattingEnabled = true;
-            this.pointCenterTypeSelector.Items.AddRange(new object[] {
-            "Top Left",
-            "Centered"});
-            this.pointCenterTypeSelector.Location = new System.Drawing.Point(122, 40);
-            this.pointCenterTypeSelector.Name = "pointCenterTypeSelector";
-            this.pointCenterTypeSelector.Size = new System.Drawing.Size(280, 21);
-            this.pointCenterTypeSelector.TabIndex = 42;
-            // 
-            // pointSizeSelector
-            // 
-            this.pointSizeSelector.Location = new System.Drawing.Point(122, 16);
-            this.pointSizeSelector.Name = "pointSizeSelector";
-            this.pointSizeSelector.Size = new System.Drawing.Size(195, 20);
-            this.pointSizeSelector.TabIndex = 43;
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(323, 18);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(18, 13);
-            this.label23.TabIndex = 44;
-            this.label23.Text = "px";
-            // 
-            // pointSizeRepresentationBox
-            // 
-            this.pointSizeRepresentationBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pointSizeRepresentationBox.Location = new System.Drawing.Point(371, 16);
-            this.pointSizeRepresentationBox.Name = "pointSizeRepresentationBox";
-            this.pointSizeRepresentationBox.Size = new System.Drawing.Size(31, 20);
-            this.pointSizeRepresentationBox.TabIndex = 45;
-            this.pointSizeRepresentationBox.TabStop = false;
-            // 
             // SettingsForm
             // 
             this.AcceptButton = this.applyButton;
@@ -670,6 +686,8 @@
             this.Text = "Settings";
             this.pointSettingsGroupBox.ResumeLayout(false);
             this.pointSettingsGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pointSizeRepresentationBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pointSizeSelector)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.vectorShadingColorBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.vectorLineColorBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointInnerColorBox)).EndInit();
@@ -690,8 +708,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pointBorderColorBlueLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointBorderColorGreenLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointBorderColorRedLevel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pointSizeSelector)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pointSizeRepresentationBox)).EndInit();
             this.ResumeLayout(false);
 
         }

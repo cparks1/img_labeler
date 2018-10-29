@@ -158,5 +158,16 @@ namespace img_vector
         {
             vectorShadingColorBox.BackColor = VectorShadingColor;
         }
+
+        private void pointSizeSelector_ValueChanged(object sender, EventArgs e)
+        {
+            Bitmap image = new Bitmap(pointSizeRepresentationBox.Width, pointSizeRepresentationBox.Height); // Image that will be set into the point size representation box
+            Graphics g = Graphics.FromImage(image); // Create a graphics class used to draw on the image
+
+            Pen p = new Pen(Color.Black);
+            g.DrawRectangle(p, 2, 2, PointSize, PointSize);
+
+            pointSizeRepresentationBox.Image = image;
+        }
     }
 }
