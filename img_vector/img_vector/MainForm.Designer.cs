@@ -30,6 +30,7 @@
         {
             this.mainFormMenuStrip = new System.Windows.Forms.MenuStrip();
             this.mainFormMenuStrip_FileItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,7 +41,7 @@
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetPointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentImagePictureBox = new System.Windows.Forms.PictureBox();
-            this.newVectorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveVectorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainFormMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currentImagePictureBox)).BeginInit();
             this.SuspendLayout();
@@ -67,6 +68,13 @@
             this.mainFormMenuStrip_FileItem.Size = new System.Drawing.Size(37, 20);
             this.mainFormMenuStrip_FileItem.Text = "File";
             // 
+            // newVectorToolStripMenuItem
+            // 
+            this.newVectorToolStripMenuItem.Name = "newVectorToolStripMenuItem";
+            this.newVectorToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.newVectorToolStripMenuItem.Text = "New Vector (Ctrl + N)";
+            this.newVectorToolStripMenuItem.Click += new System.EventHandler(this.newVectorToolStripMenuItem_Click);
+            // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -74,48 +82,49 @@
             this.directoryToolStripMenuItem,
             this.openSettingsToolStripMenuItem});
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.openToolStripMenuItem.Text = "Open";
             // 
             // imageToolStripMenuItem
             // 
             this.imageToolStripMenuItem.Name = "imageToolStripMenuItem";
-            this.imageToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.imageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.imageToolStripMenuItem.Text = "Image";
             this.imageToolStripMenuItem.Click += new System.EventHandler(this.imageToolStripMenuItem_Click);
             // 
             // directoryToolStripMenuItem
             // 
             this.directoryToolStripMenuItem.Name = "directoryToolStripMenuItem";
-            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.directoryToolStripMenuItem.Text = "Directory";
             // 
             // openSettingsToolStripMenuItem
             // 
             this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
-            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openSettingsToolStripMenuItem.Text = "Settings";
             this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.openSettingsToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveSettingsToolStripMenuItem});
+            this.saveSettingsToolStripMenuItem,
+            this.saveVectorsToolStripMenuItem});
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.saveToolStripMenuItem.Text = "Save";
             // 
             // saveSettingsToolStripMenuItem
             // 
             this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
-            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveSettingsToolStripMenuItem.Text = "Settings";
             this.saveSettingsToolStripMenuItem.Click += new System.EventHandler(this.saveSettingsToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -145,12 +154,12 @@
             this.currentImagePictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.currentImagePictureBox_MouseClick);
             this.currentImagePictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.currentImagePictureBox_MouseMove);
             // 
-            // newVectorToolStripMenuItem
+            // saveVectorsToolStripMenuItem
             // 
-            this.newVectorToolStripMenuItem.Name = "newVectorToolStripMenuItem";
-            this.newVectorToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.newVectorToolStripMenuItem.Text = "New Vector (Ctrl + N)";
-            this.newVectorToolStripMenuItem.Click += new System.EventHandler(this.newVectorToolStripMenuItem_Click);
+            this.saveVectorsToolStripMenuItem.Name = "saveVectorsToolStripMenuItem";
+            this.saveVectorsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveVectorsToolStripMenuItem.Text = "Vectors";
+            this.saveVectorsToolStripMenuItem.Click += new System.EventHandler(this.saveVectorsToolStripMenuItem_Click);
             // 
             // mainForm
             // 
@@ -191,6 +200,7 @@
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetPointsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newVectorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveVectorsToolStripMenuItem;
     }
 }
 

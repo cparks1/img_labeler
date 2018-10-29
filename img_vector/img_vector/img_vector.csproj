@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,6 +54,12 @@
     </Compile>
     <Compile Include="ClassificationQueryForm.Designer.cs">
       <DependentUpon>ClassificationQueryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExportChoiceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExportChoiceForm.Designer.cs">
+      <DependentUpon>ExportChoiceForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="MainForm.cs">
@@ -72,6 +81,9 @@
     <EmbeddedResource Include="ClassificationQueryForm.resx">
       <DependentUpon>ClassificationQueryForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ExportChoiceForm.resx">
+      <DependentUpon>ExportChoiceForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -87,6 +99,7 @@
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

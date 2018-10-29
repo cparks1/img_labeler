@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace img_vector
 {
@@ -271,7 +273,8 @@ namespace img_vector
         {
             if (pictureLoaded)
             {
-                if (vectors.Count > 0)
+                if (
+                    vectors.Count > 0)
                 {
                     if (vectors[currentVectorIndex].points.Count > 0)
                     {
@@ -307,6 +310,24 @@ namespace img_vector
             if(e.Control && e.KeyCode == Keys.N) // New vector
             {
                 AddNewVector();
+            }
+        }
+
+        private void saveVectorsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (ExportChoiceForm exportForm = new ExportChoiceForm(typeof(List<Vector>), vectors))
+            {
+                if(exportForm.ShowDialog() == DialogResult.OK)
+                {
+                    using (SaveFileDialog saveDialog = new SaveFileDialog())
+                    {
+                        saveDialog.Filter = $"{exportForm.DataFormat.ToString()} Files | *.{exportForm.DataFormat.ToString()}";
+                        if(saveDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            File.WriteAllText(saveDialog.FileName, exportForm.Export_Data);
+                        }
+                    }
+                }
             }
         }
     }

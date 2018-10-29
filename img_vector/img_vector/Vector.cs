@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace img_vector
 {
-    class Vector
+    public class Vector
     {
         /// <summary>
         /// All points that make up this vector.
