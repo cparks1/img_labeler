@@ -1,4 +1,5 @@
-﻿using System;
+﻿using img_vector.Forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -42,9 +43,25 @@ namespace img_vector
         /// </summary>
         Settings settings = new Settings();
 
+        /// <summary>
+        /// Window used to display and change between loaded images.
+        /// </summary>
+        ImageListForm imageList;
+
         public mainForm()
         {
             InitializeComponent();
+            imageList = new ImageListForm();
+            imageList.VisibleChanged += ImageList_VisibleChanged;
+        }
+
+        private void ImageList_VisibleChanged(object sender, EventArgs e)
+        {
+            // Handles the image list window being closed via the X button not updating the "View->Image List" check state.
+            if(!imageList.Visible)
+            {
+                viewImageListToolStripMenuItem.Checked = false;
+            }
         }
 
         private void currentImagePictureBox_MouseClick(object sender, MouseEventArgs e)
@@ -154,7 +171,7 @@ namespace img_vector
                 {
                     try
                     {
-                        LoadImage(new Bitmap(fileDialog.OpenFile()));
+                        LoadImage(new Bitmap(fileDialog.OpenFile()), fileDialog.FileName);
                     }
                     catch (Exception error)
                     {
@@ -169,7 +186,7 @@ namespace img_vector
         /// </summary>
         /// <param name="newImage">New image to be displayed via the picture box.
         /// </param>
-        private void LoadImage(Image newImage)
+        private void LoadImage(Image newImage, string filePath)
         {
             this.vectors.Clear();
             this.currentVectorIndex = 0;
@@ -189,6 +206,8 @@ namespace img_vector
             this.currentImagePictureBox.Height = newImage.Height;
 
             this.pictureLoaded = true; // Set a variable indicating a picture has been loaded.
+
+            imageList.AddNewImage(newImage, filePath);
         }
 
         private void saveSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -264,7 +283,7 @@ namespace img_vector
                 case ".bmp":
                 case ".gif":
                 case ".tif":
-                    LoadImage(new Bitmap(file));
+                    LoadImage(new Bitmap(file), file);
                     break;
             }
         }
@@ -328,6 +347,18 @@ namespace img_vector
                         }
                     }
                 }
+            }
+        }
+
+        private void viewImageListToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if(viewImageListToolStripMenuItem.Checked) // Show the image list window if not already shown.
+            {
+                imageList.Show();
+            }
+            else // Hide the image list window if not already shown.
+            {
+                imageList.Hide();
             }
         }
     }

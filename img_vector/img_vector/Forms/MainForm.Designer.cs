@@ -37,11 +37,13 @@
             this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveVectorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetPointsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentImagePictureBox = new System.Windows.Forms.PictureBox();
-            this.saveVectorsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewImageListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainFormMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currentImagePictureBox)).BeginInit();
             this.SuspendLayout();
@@ -50,7 +52,8 @@
             // 
             this.mainFormMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mainFormMenuStrip_FileItem,
-            this.editToolStripMenuItem});
+            this.editToolStripMenuItem,
+            this.viewToolStripMenuItem});
             this.mainFormMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainFormMenuStrip.Name = "mainFormMenuStrip";
             this.mainFormMenuStrip.Size = new System.Drawing.Size(800, 24);
@@ -88,20 +91,20 @@
             // imageToolStripMenuItem
             // 
             this.imageToolStripMenuItem.Name = "imageToolStripMenuItem";
-            this.imageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.imageToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.imageToolStripMenuItem.Text = "Image";
             this.imageToolStripMenuItem.Click += new System.EventHandler(this.imageToolStripMenuItem_Click);
             // 
             // directoryToolStripMenuItem
             // 
             this.directoryToolStripMenuItem.Name = "directoryToolStripMenuItem";
-            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.directoryToolStripMenuItem.Text = "Directory";
             // 
             // openSettingsToolStripMenuItem
             // 
             this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
-            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.openSettingsToolStripMenuItem.Text = "Settings";
             this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.openSettingsToolStripMenuItem_Click);
             // 
@@ -120,6 +123,13 @@
             this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveSettingsToolStripMenuItem.Text = "Settings";
             this.saveSettingsToolStripMenuItem.Click += new System.EventHandler(this.saveSettingsToolStripMenuItem_Click);
+            // 
+            // saveVectorsToolStripMenuItem
+            // 
+            this.saveVectorsToolStripMenuItem.Name = "saveVectorsToolStripMenuItem";
+            this.saveVectorsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveVectorsToolStripMenuItem.Text = "Vectors";
+            this.saveVectorsToolStripMenuItem.Click += new System.EventHandler(this.saveVectorsToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -154,12 +164,21 @@
             this.currentImagePictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.currentImagePictureBox_MouseClick);
             this.currentImagePictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.currentImagePictureBox_MouseMove);
             // 
-            // saveVectorsToolStripMenuItem
+            // viewToolStripMenuItem
             // 
-            this.saveVectorsToolStripMenuItem.Name = "saveVectorsToolStripMenuItem";
-            this.saveVectorsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.saveVectorsToolStripMenuItem.Text = "Vectors";
-            this.saveVectorsToolStripMenuItem.Click += new System.EventHandler(this.saveVectorsToolStripMenuItem_Click);
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewImageListToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "View";
+            // 
+            // viewImageListToolStripMenuItem
+            // 
+            this.viewImageListToolStripMenuItem.CheckOnClick = true;
+            this.viewImageListToolStripMenuItem.Name = "viewImageListToolStripMenuItem";
+            this.viewImageListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewImageListToolStripMenuItem.Text = "Image List";
+            this.viewImageListToolStripMenuItem.CheckedChanged += new System.EventHandler(this.viewImageListToolStripMenuItem_CheckedChanged);
             // 
             // mainForm
             // 
@@ -201,6 +220,8 @@
         private System.Windows.Forms.ToolStripMenuItem resetPointsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newVectorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveVectorsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewImageListToolStripMenuItem;
     }
 }
 
