@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using Ookii.Dialogs;
 
 namespace img_vector
 {
@@ -21,12 +22,22 @@ namespace img_vector
         /// <summary>
         /// Whether or not an image has yet been loaded into the image display box.
         /// </summary>
-        bool pictureLoaded = false;
+        bool pictureLoaded => imageClassifications.Count > 0;
 
         /// <summary>
-        /// List of all vectors created for this image.
+        /// List of all images loaded and their classifications during this session.
         /// </summary>
-        List<Vector> vectors = new List<Vector>();
+        List<ImageClassification> imageClassifications = new List<ImageClassification>();
+
+        /// <summary>
+        /// Index of the image classification currently being worked on.
+        /// </summary>
+        int currentImageClassificationIndex = 0;
+
+        /// <summary>
+        /// Image classification currently being worked on.
+        /// </summary>
+        ImageClassification currentImageClassification => imageClassifications[currentImageClassificationIndex];
 
         /// <summary>
         /// Index of the vector currently being worked on.
@@ -34,14 +45,24 @@ namespace img_vector
         int currentVectorIndex = 0;
 
         /// <summary>
-        /// Current image being vectored.
+        /// The vector currently being worked on.
         /// </summary>
-        Image currentImage;
+        Vector currentVector => currentImageClassification.vectors[currentVectorIndex];
 
         /// <summary>
         /// Program settings.
         /// </summary>
         Settings settings = new Settings();
+
+        /// <summary>
+        /// Current zoom level, in percentage.
+        /// </summary>
+        int currentZoomLevel = 100;
+
+        /// <summary>
+        /// Percentage by which the zoom will increment/decrement when zooming.
+        /// </summary>
+        const int zoomStep = 25;
 
         /// <summary>
         /// Window used to display and change between loaded images.
@@ -76,15 +97,15 @@ namespace img_vector
                 {
                     if (!CursorIsInAnyPoint(e.X, e.Y)) // Don't add a new point if we're already inside of one.
                     {
-                        vectors[currentVectorIndex].points.Add(new Point(e.X, e.Y));
+                        currentVector.points.Add(new Point(e.X, e.Y));
                     }
                 }
                 else if(e.Button == MouseButtons.Right) // Right button : Delete closest point if a point is within a certain radius
                 {
-                    int index = vectors[currentVectorIndex].points.FindIndex(point => CursorIsInPoint(point, e.X, e.Y));
+                    int index = currentVector.points.FindIndex(point => CursorIsInPoint(point, e.X, e.Y));
                     if (index > -1) // The cursor is actually in a point
                     {
-                        vectors[currentVectorIndex].points.RemoveAt(index);
+                        currentVector.points.RemoveAt(index);
                     }
                 }
 
@@ -116,13 +137,16 @@ namespace img_vector
 
         private bool CursorIsInAnyPoint(int X, int Y)
         {
-            foreach(Vector v in vectors) // TODO: Optimize this O(n^2) loop
+            if (pictureLoaded)
             {
-                foreach(Point p in v.points)
+                foreach (Vector v in currentImageClassification.vectors) // TODO: Optimize this O(n^2) loop
                 {
-                    if (CursorIsInPoint(p, X, Y))
+                    foreach (Point p in v.points)
                     {
-                        return true;
+                        if (CursorIsInPoint(p, X, Y))
+                        {
+                            return true;
+                        }
                     }
                 }
             }
@@ -148,7 +172,7 @@ namespace img_vector
 
             if (pictureLoaded)
             {
-                foreach(Vector v in vectors)
+                foreach(Vector v in currentImageClassification.vectors)
                 {
                     v.DrawVector(settings, e.Graphics);
                 }
@@ -188,26 +212,25 @@ namespace img_vector
         /// </param>
         private void LoadImage(Image newImage, string filePath)
         {
-            this.vectors.Clear();
-            this.currentVectorIndex = 0;
+            this.imageClassifications.Add(new ImageClassification(filePath)); // Add a new image classification object to the list.
+            this.currentImageClassificationIndex = this.imageClassifications.Count - 1; // Set the current image classification index to the new classification object.
 
-            using (ClassificationQueryForm classificationQuery = new ClassificationQueryForm(CancelEnabled: false))
+            this.currentVectorIndex = 0; // Reset the current vector.
+
+            using (ClassificationQueryForm classificationQuery = new ClassificationQueryForm(CancelEnabled: false)) // Query for the classification of the first vector in this object.
             {
                 if (classificationQuery.ShowDialog() == DialogResult.OK)
                 {
-                    this.vectors.Add(new Vector(classificationQuery.Classification));
+                    currentImageClassification.vectors.Add(new Vector(classificationQuery.Classification)); // Add the first vector to the new image classification object.
                 }
             }
 
-            this.currentImage = newImage; // Set the current image known as being displayed
-            this.currentImagePictureBox.Image = this.currentImage; // Show the new image
+            this.currentImagePictureBox.Image = this.currentImageClassification.image; // Show the new image
 
-            this.currentImagePictureBox.Width = newImage.Width; // Set the size of the picture box.
-            this.currentImagePictureBox.Height = newImage.Height;
+            this.currentImagePictureBox.Width = this.currentImageClassification.image.Width; // Set the size of the picture box.
+            this.currentImagePictureBox.Height = this.currentImageClassification.image.Height;
 
-            this.pictureLoaded = true; // Set a variable indicating a picture has been loaded.
-
-            imageList.AddNewImage(newImage, filePath);
+            imageList.AddNewImage(newImage, filePath); // Add a new image to the image list.
         }
 
         private void saveSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -250,11 +273,19 @@ namespace img_vector
         private void resetPointsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Clear all added points.
-            this.vectors.Clear();
-            this.vectors.Add(new Vector());
-            this.currentVectorIndex = 0;
-
-            this.currentImagePictureBox.Refresh();
+            if(imageClassifications.Count > 0)
+            {
+                using (ClassificationQueryForm classificationQueryForm = new ClassificationQueryForm())
+                {
+                    if(classificationQueryForm.ShowDialog() == DialogResult.OK) // User OK'd the new classification, is going through with resetting all vectors
+                    {
+                        currentImageClassification.vectors.Clear();
+                        currentImageClassification.vectors.Add(new Vector(classificationQueryForm.Classification));
+                        this.currentVectorIndex = 0;
+                        this.currentImagePictureBox.Refresh();
+                    }
+                }
+            }
         }
 
         private void mainForm_DragEnter(object sender, DragEventArgs e)
@@ -288,35 +319,39 @@ namespace img_vector
             }
         }
 
+        /// <summary>
+        /// Adds a new vector. Prompts the user for this vector's classification in doing so.
+        /// </summary>
         private void AddNewVector()
         {
             if (pictureLoaded)
             {
-                if (
-                    vectors.Count > 0)
+                if (currentImageClassification.vectors.Count > 0)
                 {
-                    if (vectors[currentVectorIndex].points.Count > 0)
+                    if (currentVector.points.Count > 0)
                     {
                         using (ClassificationQueryForm classificationQuery = new ClassificationQueryForm())
                         {
-                            classificationQuery.Classification = vectors[currentVectorIndex].classification;
-                            if (classificationQuery.ShowDialog() == DialogResult.OK)
+                            classificationQuery.Classification = currentVector.classification; // Default the classification being presented to be the last classification entered.
+                            classificationQuery.Activate();
+                            if (classificationQuery.ShowDialog() == DialogResult.OK) // If the user clicked "OK"
                             {
-                                vectors.Add(new Vector(classificationQuery.Classification));
-                                currentVectorIndex = vectors.Count - 1;
+                                currentImageClassification.vectors.Add(new Vector(classificationQuery.Classification)); // Then add the newest vector, with the classification the user entered.
+                                currentVectorIndex = currentImageClassification.vectors.Count - 1; // Set the current vector to be the newest one.
                             }
                         }
                     }
-                    else
+                    else // User tried to create a new vector when the current one is blank.
                     {
                         MessageBox.Show("Your current vector is blank. You must add some points before creating a new vector.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
-            else
+            else // User tried to create a new vector when an image hasn't even been loaded yet.
             {
                 MessageBox.Show("You must load an image before creating a vector.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            this.Activate();
         }
 
         private void newVectorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -330,20 +365,51 @@ namespace img_vector
             {
                 AddNewVector();
             }
+            else if(e.Control && e.KeyCode == Keys.Add) // Zoom in
+            {
+                ZoomImageShown(increment: true);
+            }
+            else if(e.Control && e.KeyCode == Keys.Subtract) // Zoom out
+            {
+                ZoomImageShown(increment: false);
+            }
         }
 
         private void saveVectorsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (ExportChoiceForm exportForm = new ExportChoiceForm(typeof(List<Vector>), vectors))
+            if (pictureLoaded)
             {
-                if(exportForm.ShowDialog() == DialogResult.OK)
+                using (ExportChoiceForm exportForm = new ExportChoiceForm(typeof(List<ImageClassification>), imageClassifications))
                 {
-                    using (SaveFileDialog saveDialog = new SaveFileDialog())
+                    if (exportForm.ShowDialog() == DialogResult.OK)
                     {
-                        saveDialog.Filter = $"{exportForm.DataFormat.ToString()} Files | *.{exportForm.DataFormat.ToString()}";
-                        if(saveDialog.ShowDialog() == DialogResult.OK)
+                        switch (exportForm.DataFormat)
                         {
-                            File.WriteAllText(saveDialog.FileName, exportForm.Export_Data);
+                            case ExportChoiceForm.ExportFormat.JSON:
+                            case ExportChoiceForm.ExportFormat.XML:
+                                using (SaveFileDialog saveDialog = new SaveFileDialog())
+                                {
+                                    saveDialog.Filter = $"{exportForm.DataFormat.ToString()} Files | *.{exportForm.DataFormat.ToString()}";
+                                    if (saveDialog.ShowDialog() == DialogResult.OK)
+                                    {
+                                        File.WriteAllText(saveDialog.FileName, exportForm.Text_Export_Data);
+                                    }
+                                }
+                                break;
+                            case ExportChoiceForm.ExportFormat.PNG_Segmentation_Mask:
+                                using (VistaFolderBrowserDialog dirBrowser = new VistaFolderBrowserDialog())
+                                {
+                                    dirBrowser.Description = "Select a folder to save the PNG masks to.";
+                                    if (dirBrowser.ShowDialog() == DialogResult.OK)
+                                    {
+                                        Image[] masks = currentImageClassification.PNG_Masks();
+                                        for (int i = 0; i < masks.Length; i++)
+                                        {
+                                            masks[i].Save(Path.Combine(dirBrowser.SelectedPath, Path.GetFileNameWithoutExtension(currentImageClassification.imagePath) + '_' + i.ToString() + ".png"), System.Drawing.Imaging.ImageFormat.Png);
+                                        }
+                                    }
+                                }
+                                break;
                         }
                     }
                 }
@@ -360,6 +426,43 @@ namespace img_vector
             {
                 imageList.Hide();
             }
+        }
+
+        /// <summary>
+        /// Event called upon the main form's size changing.
+        /// Resizes the main panel to take up the entire space of the form.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mainForm_Resize(object sender, EventArgs e)
+        {
+            mainPanel.Width = this.Width - 18;
+            mainPanel.Height = this.Height - 85;
+        }
+
+        /// <summary>
+        /// Zooms the image in the picturebox by a given amount.
+        /// </summary>
+        /// <param name="increment">Whether to increment or decrement the current zoom level.</param>
+        private void ZoomImageShown(bool increment)
+        {
+            currentZoomLevel = increment ? currentZoomLevel + zoomStep : currentZoomLevel - zoomStep;
+            float zoomScaleFactor = currentZoomLevel / 100.0f;
+
+            currentImagePictureBox.Image = new Bitmap(currentImageClassification.image, new Size((int)(currentImageClassification.image.Width * zoomScaleFactor), (int)(currentImageClassification.image.Height * zoomScaleFactor))); ;
+            currentImagePictureBox.Size = currentImagePictureBox.Image.Size;
+
+            zoomStatusLabel.Text = currentZoomLevel.ToString() + '%';
+        }
+
+        private void viewZoomPlusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ZoomImageShown(increment: true);
+        }
+
+        private void viewZoomMinusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ZoomImageShown(increment: false);
         }
     }
 }

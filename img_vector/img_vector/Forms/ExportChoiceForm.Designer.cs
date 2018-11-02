@@ -34,6 +34,7 @@
             this.exportFormatJSONRadioButton = new System.Windows.Forms.RadioButton();
             this.exportButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.exportFormatPNGMaskRadioButton = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,11 +50,12 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.exportFormatPNGMaskRadioButton);
             this.groupBox1.Controls.Add(this.exportFormatXMLRadioButton);
             this.groupBox1.Controls.Add(this.exportFormatJSONRadioButton);
             this.groupBox1.Location = new System.Drawing.Point(13, 389);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(400, 70);
+            this.groupBox1.Size = new System.Drawing.Size(400, 101);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Export Format";
@@ -85,7 +87,7 @@
             // exportButton
             // 
             this.exportButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.exportButton.Location = new System.Drawing.Point(13, 466);
+            this.exportButton.Location = new System.Drawing.Point(13, 496);
             this.exportButton.Name = "exportButton";
             this.exportButton.Size = new System.Drawing.Size(90, 23);
             this.exportButton.TabIndex = 2;
@@ -95,12 +97,24 @@
             // cancelButton
             // 
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(323, 466);
+            this.cancelButton.Location = new System.Drawing.Point(323, 496);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(90, 23);
             this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
+            // 
+            // exportFormatPNGMaskRadioButton
+            // 
+            this.exportFormatPNGMaskRadioButton.AutoSize = true;
+            this.exportFormatPNGMaskRadioButton.Location = new System.Drawing.Point(7, 68);
+            this.exportFormatPNGMaskRadioButton.Name = "exportFormatPNGMaskRadioButton";
+            this.exportFormatPNGMaskRadioButton.Size = new System.Drawing.Size(145, 17);
+            this.exportFormatPNGMaskRadioButton.TabIndex = 2;
+            this.exportFormatPNGMaskRadioButton.TabStop = true;
+            this.exportFormatPNGMaskRadioButton.Text = "PNG Segmentation Mask";
+            this.exportFormatPNGMaskRadioButton.UseVisualStyleBackColor = true;
+            this.exportFormatPNGMaskRadioButton.CheckedChanged += new System.EventHandler(this.exportChoice_Changed);
             // 
             // ExportChoiceForm
             // 
@@ -108,7 +122,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(432, 496);
+            this.ClientSize = new System.Drawing.Size(432, 616);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.exportButton);
             this.Controls.Add(this.groupBox1);
@@ -130,5 +144,6 @@
         private System.Windows.Forms.RadioButton exportFormatJSONRadioButton;
         private System.Windows.Forms.Button exportButton;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.RadioButton exportFormatPNGMaskRadioButton;
     }
 }

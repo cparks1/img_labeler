@@ -66,6 +66,25 @@ namespace img_vector
             }
         }
 
+        public void DrawPNGMask(Graphics g)
+        {
+            Brush inner_shade_brush = new SolidBrush(Color.White);
+            GraphicsPath path = new GraphicsPath();
+
+            if (points.Count > 1)
+            {
+                for (int i = 1; i < points.Count; i++)
+                {
+                    path.AddLine(points[i - 1], points[i]);
+                }
+            }
+
+            path.CloseFigure();
+
+            g.Clear(Color.Black); // Clear the image with the background being black.
+            g.FillPath(inner_shade_brush, path);
+        }
+
         public Vector()
         {
             points = new List<Point>();

@@ -19,7 +19,8 @@ namespace img_vector
         {
             None,
             JSON,
-            XML
+            XML,
+            PNG_Segmentation_Mask
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace img_vector
             }
         }
 
-        public string Export_Data
+        public string Text_Export_Data
         {
             get
             {
@@ -62,10 +63,28 @@ namespace img_vector
                         return JSON_Data;
                     case ExportFormat.XML:
                         return XML_Data;
+                    case ExportFormat.PNG_Segmentation_Mask:
+                        return "This data cannot be displayed via text.";
                     default:
                         return "";
                 }
             }
+        }
+
+        public Image[] Image_Export_Data(int imgWidth, int imgHeight)
+        {
+            List<Image> masks = new List<Image>();
+
+            if (type == typeof(List<ImageClassification>))
+            {
+                List<ImageClassification> imageClassifications = (List<ImageClassification>)data;
+                foreach(ImageClassification classifier in imageClassifications)
+                {
+                    masks.AddRange(classifier.PNG_Masks());
+                }
+            }
+
+            return masks.ToArray();
         }
 
         public ExportChoiceForm()
@@ -87,6 +106,8 @@ namespace img_vector
                 { return ExportFormat.JSON; }
                 else if (exportFormatXMLRadioButton.Checked)
                 { return ExportFormat.XML; }
+                else if(exportFormatPNGMaskRadioButton.Checked)
+                { return ExportFormat.PNG_Segmentation_Mask; }
                 else
                 { return ExportFormat.None; }
             }
@@ -94,7 +115,7 @@ namespace img_vector
 
         private void exportChoice_Changed(object sender, EventArgs e)
         {
-            exportExampleTextbox.Text = Export_Data;
+            exportExampleTextbox.Text = Text_Export_Data;
         }
     }
 }
