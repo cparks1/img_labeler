@@ -6,6 +6,6 @@ To use,
 drag an drop an image onto the form.
 You'll be asked to provide a classification. This will be the classification of the first vector you create for this image.
 
-Press Ctrl+N to create new vectors.
+Press Ctrl+N to create additional vectors.
 
 Once you've created all the vectors you want, click File->Save->Vectors and export the vectors to a file format of your choosing.
