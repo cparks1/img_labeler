@@ -31,5 +31,10 @@ namespace img_vector
                 classificationTextBox.SelectAll();
             }
         }
+
+        private void ClassificationQueryForm_Shown(object sender, EventArgs e)
+        {
+            this.Activate();
+        }
     }
 }

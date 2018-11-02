@@ -97,12 +97,12 @@ namespace img_vector
                 {
                     if (!CursorIsInAnyPoint(e.X, e.Y)) // Don't add a new point if we're already inside of one.
                     {
-                        currentVector.points.Add(new Point(e.X, e.Y));
+                        currentVector.points.Add(new Point((int)(e.X / (currentZoomLevel/100.0f)), (int)(e.Y / (currentZoomLevel/100.0f))));
                     }
                 }
                 else if(e.Button == MouseButtons.Right) // Right button : Delete closest point if a point is within a certain radius
                 {
-                    int index = currentVector.points.FindIndex(point => CursorIsInPoint(point, e.X, e.Y));
+                    int index = currentVector.points.FindIndex(point => CursorIsInPoint(new Point((int)(point.X * currentZoomLevel/100.0f), (int)(point.Y * currentZoomLevel/100.0f)), e.X, e.Y));
                     if (index > -1) // The cursor is actually in a point
                     {
                         currentVector.points.RemoveAt(index);
@@ -143,7 +143,8 @@ namespace img_vector
                 {
                     foreach (Point p in v.points)
                     {
-                        if (CursorIsInPoint(p, X, Y))
+                        Point scaledPoint = new Point((int)(p.X * currentZoomLevel / 100.0f), (int)(p.Y * currentZoomLevel / 100.0f)); // Handle the zoom level
+                        if (CursorIsInPoint(scaledPoint, X, Y))
                         {
                             return true;
                         }
@@ -174,7 +175,7 @@ namespace img_vector
             {
                 foreach(Vector v in currentImageClassification.vectors)
                 {
-                    v.DrawVector(settings, e.Graphics);
+                    v.DrawVector(settings, e.Graphics, scaleFactor: currentZoomLevel/100.0f);
                 }
             }
         }
@@ -219,18 +220,27 @@ namespace img_vector
 
             using (ClassificationQueryForm classificationQuery = new ClassificationQueryForm(CancelEnabled: false)) // Query for the classification of the first vector in this object.
             {
-                if (classificationQuery.ShowDialog() == DialogResult.OK)
+                if (classificationQuery.ShowDialog() == DialogResult.OK) // User should not be able to click "Cancel", but everything after the load will be placed within this check
                 {
                     currentImageClassification.vectors.Add(new Vector(classificationQuery.Classification)); // Add the first vector to the new image classification object.
+
+                    this.currentZoomLevel = 100; // Reset the zoom level.
+                    zoomStatusLabel.Text = $"Zoom: {currentZoomLevel}%"; // Reset the zoom status label.
+
+                    if (this.currentImagePictureBox.Image != null) // Get rid of the old picture being shown.
+                    {
+                        this.currentImagePictureBox.Image.Dispose();
+                    }
+
+                    this.currentImagePictureBox.Image = new Bitmap(this.currentImageClassification.image); // Show the new image
+
+                    this.currentImagePictureBox.Size = this.currentImageClassification.image.Size; // Set the size of the picture box so that it can display the entire image.
+
+                    imageList.AddNewImage(newImage, filePath); // Add a new image to the image list.
+
+                    this.Activate();
                 }
             }
-
-            this.currentImagePictureBox.Image = this.currentImageClassification.image; // Show the new image
-
-            this.currentImagePictureBox.Width = this.currentImageClassification.image.Width; // Set the size of the picture box.
-            this.currentImagePictureBox.Height = this.currentImageClassification.image.Height;
-
-            imageList.AddNewImage(newImage, filePath); // Add a new image to the image list.
         }
 
         private void saveSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -446,13 +456,15 @@ namespace img_vector
         /// <param name="increment">Whether to increment or decrement the current zoom level.</param>
         private void ZoomImageShown(bool increment)
         {
-            currentZoomLevel = increment ? currentZoomLevel + zoomStep : currentZoomLevel - zoomStep;
+            currentZoomLevel = increment ? currentZoomLevel + zoomStep : currentZoomLevel <= zoomStep ? currentZoomLevel : currentZoomLevel - zoomStep; // Zoom in as much as you want, but prevent the zoom level from going to 0 or lower than 0 because it will throw exceptions.
+
             float zoomScaleFactor = currentZoomLevel / 100.0f;
 
-            currentImagePictureBox.Image = new Bitmap(currentImageClassification.image, new Size((int)(currentImageClassification.image.Width * zoomScaleFactor), (int)(currentImageClassification.image.Height * zoomScaleFactor))); ;
+            currentImagePictureBox.Image.Dispose();
+            currentImagePictureBox.Image = new Bitmap(currentImageClassification.image, new Size((int)(currentImageClassification.image.Width * zoomScaleFactor), (int)(currentImageClassification.image.Height * zoomScaleFactor)));
             currentImagePictureBox.Size = currentImagePictureBox.Image.Size;
 
-            zoomStatusLabel.Text = currentZoomLevel.ToString() + '%';
+            zoomStatusLabel.Text = $"Zoom: {currentZoomLevel.ToString()}%";
         }
 
         private void viewZoomPlusToolStripMenuItem_Click(object sender, EventArgs e)

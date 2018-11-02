@@ -82,6 +82,9 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "ClassificationQueryForm";
+            this.Text = "Enter Classification";
+            this.TopMost = true;
+            this.Shown += new System.EventHandler(this.ClassificationQueryForm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
