@@ -47,9 +47,9 @@
             this.viewZoomMinusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentImagePictureBox = new System.Windows.Forms.PictureBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.mousePositionStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.zoomStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainPanel = new System.Windows.Forms.Panel();
-            this.mousePositionStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainFormMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currentImagePictureBox)).BeginInit();
             this.statusStrip.SuspendLayout();
@@ -128,15 +128,15 @@
             // saveSettingsToolStripMenuItem
             // 
             this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
-            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveSettingsToolStripMenuItem.Text = "Settings";
             this.saveSettingsToolStripMenuItem.Click += new System.EventHandler(this.saveSettingsToolStripMenuItem_Click);
             // 
             // saveVectorsToolStripMenuItem
             // 
             this.saveVectorsToolStripMenuItem.Name = "saveVectorsToolStripMenuItem";
-            this.saveVectorsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
-            this.saveVectorsToolStripMenuItem.Text = "Vectors";
+            this.saveVectorsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveVectorsToolStripMenuItem.Text = "Classification Data";
             this.saveVectorsToolStripMenuItem.Click += new System.EventHandler(this.saveVectorsToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
@@ -215,6 +215,12 @@
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip1";
             // 
+            // mousePositionStatusLabel
+            // 
+            this.mousePositionStatusLabel.Name = "mousePositionStatusLabel";
+            this.mousePositionStatusLabel.Size = new System.Drawing.Size(33, 17);
+            this.mousePositionStatusLabel.Text = "(0, 0)";
+            // 
             // zoomStatusLabel
             // 
             this.zoomStatusLabel.Name = "zoomStatusLabel";
@@ -229,12 +235,6 @@
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Size = new System.Drawing.Size(800, 423);
             this.mainPanel.TabIndex = 3;
-            // 
-            // mousePositionStatusLabel
-            // 
-            this.mousePositionStatusLabel.Name = "mousePositionStatusLabel";
-            this.mousePositionStatusLabel.Size = new System.Drawing.Size(33, 17);
-            this.mousePositionStatusLabel.Text = "(0, 0)";
             // 
             // mainForm
             // 

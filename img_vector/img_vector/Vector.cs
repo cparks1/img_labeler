@@ -86,6 +86,15 @@ namespace img_vector
             g.FillPath(inner_shade_brush, path);
         }
 
+        public Image PNGMask(Size originalImageSize)
+        {
+            Image mask = new Bitmap(originalImageSize.Width, originalImageSize.Height);
+            Graphics g = Graphics.FromImage(mask);
+            this.DrawPNGMask(g);
+
+            return mask;
+        }
+
         public Vector()
         {
             points = new List<Point>();

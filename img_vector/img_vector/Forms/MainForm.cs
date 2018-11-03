@@ -418,6 +418,7 @@ namespace img_vector
                                         for (int i = 0; i < masks.Length; i++)
                                         {
                                             masks[i].Save(Path.Combine(dirBrowser.SelectedPath, Path.GetFileNameWithoutExtension(currentImageClassification.imagePath) + '_' + i.ToString() + ".png"), System.Drawing.Imaging.ImageFormat.Png);
+                                            masks[i].Dispose();
                                         }
                                     }
                                 }

@@ -30,11 +30,11 @@
         {
             this.exportExampleTextbox = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.exportFormatPNGMaskRadioButton = new System.Windows.Forms.RadioButton();
             this.exportFormatXMLRadioButton = new System.Windows.Forms.RadioButton();
             this.exportFormatJSONRadioButton = new System.Windows.Forms.RadioButton();
             this.exportButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.exportFormatPNGMaskRadioButton = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,6 +59,18 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Export Format";
+            // 
+            // exportFormatPNGMaskRadioButton
+            // 
+            this.exportFormatPNGMaskRadioButton.AutoSize = true;
+            this.exportFormatPNGMaskRadioButton.Location = new System.Drawing.Point(7, 68);
+            this.exportFormatPNGMaskRadioButton.Name = "exportFormatPNGMaskRadioButton";
+            this.exportFormatPNGMaskRadioButton.Size = new System.Drawing.Size(169, 17);
+            this.exportFormatPNGMaskRadioButton.TabIndex = 2;
+            this.exportFormatPNGMaskRadioButton.TabStop = true;
+            this.exportFormatPNGMaskRadioButton.Text = "PNG Segmentation Mask Files";
+            this.exportFormatPNGMaskRadioButton.UseVisualStyleBackColor = true;
+            this.exportFormatPNGMaskRadioButton.CheckedChanged += new System.EventHandler(this.exportChoice_Changed);
             // 
             // exportFormatXMLRadioButton
             // 
@@ -103,18 +115,6 @@
             this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
-            // 
-            // exportFormatPNGMaskRadioButton
-            // 
-            this.exportFormatPNGMaskRadioButton.AutoSize = true;
-            this.exportFormatPNGMaskRadioButton.Location = new System.Drawing.Point(7, 68);
-            this.exportFormatPNGMaskRadioButton.Name = "exportFormatPNGMaskRadioButton";
-            this.exportFormatPNGMaskRadioButton.Size = new System.Drawing.Size(145, 17);
-            this.exportFormatPNGMaskRadioButton.TabIndex = 2;
-            this.exportFormatPNGMaskRadioButton.TabStop = true;
-            this.exportFormatPNGMaskRadioButton.Text = "PNG Segmentation Mask";
-            this.exportFormatPNGMaskRadioButton.UseVisualStyleBackColor = true;
-            this.exportFormatPNGMaskRadioButton.CheckedChanged += new System.EventHandler(this.exportChoice_Changed);
             // 
             // ExportChoiceForm
             // 
