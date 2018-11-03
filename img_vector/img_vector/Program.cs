@@ -16,7 +16,10 @@ namespace img_vector
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new mainForm());
+
+            mainForm main = new mainForm();
+
+            Application.Run(main);
         }
     }
 }

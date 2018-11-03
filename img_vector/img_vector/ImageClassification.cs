@@ -18,7 +18,7 @@ namespace img_vector
         /// <summary>
         /// Image being classified.
         /// </summary>
-        [JsonIgnore]
+        [JsonIgnore] // Don't want to try to encode the image into the JSON or XML file. It can't anyways.
         public readonly Image image;
 
         /// <summary>

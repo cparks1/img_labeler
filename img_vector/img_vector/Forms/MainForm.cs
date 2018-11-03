@@ -165,6 +165,8 @@ namespace img_vector
             {
                 Cursor.Current = Cursors.Arrow;
             }
+
+            mousePositionStatusLabel.Text = $"({(int)(e.X / (currentZoomLevel / 100.0f))}, {(int)(e.Y / (currentZoomLevel / 100.0f))})";
         }
 
         private void currentImagePictureBox_Paint(object sender, PaintEventArgs e)
@@ -456,15 +458,18 @@ namespace img_vector
         /// <param name="increment">Whether to increment or decrement the current zoom level.</param>
         private void ZoomImageShown(bool increment)
         {
-            currentZoomLevel = increment ? currentZoomLevel + zoomStep : currentZoomLevel <= zoomStep ? currentZoomLevel : currentZoomLevel - zoomStep; // Zoom in as much as you want, but prevent the zoom level from going to 0 or lower than 0 because it will throw exceptions.
+            if (pictureLoaded)
+            {
+                currentZoomLevel = increment ? currentZoomLevel + zoomStep : currentZoomLevel <= zoomStep ? currentZoomLevel : currentZoomLevel - zoomStep; // Zoom in as much as you want, but prevent the zoom level from going to 0 or lower than 0 because it will throw exceptions.
 
-            float zoomScaleFactor = currentZoomLevel / 100.0f;
+                float zoomScaleFactor = currentZoomLevel / 100.0f;
 
-            currentImagePictureBox.Image.Dispose();
-            currentImagePictureBox.Image = new Bitmap(currentImageClassification.image, new Size((int)(currentImageClassification.image.Width * zoomScaleFactor), (int)(currentImageClassification.image.Height * zoomScaleFactor)));
-            currentImagePictureBox.Size = currentImagePictureBox.Image.Size;
+                currentImagePictureBox.Image.Dispose();
+                currentImagePictureBox.Image = new Bitmap(currentImageClassification.image, new Size((int)(currentImageClassification.image.Width * zoomScaleFactor), (int)(currentImageClassification.image.Height * zoomScaleFactor)));
+                currentImagePictureBox.Size = currentImagePictureBox.Image.Size;
 
-            zoomStatusLabel.Text = $"Zoom: {currentZoomLevel.ToString()}%";
+                zoomStatusLabel.Text = $"Zoom: {currentZoomLevel.ToString()}%";
+            }
         }
 
         private void viewZoomPlusToolStripMenuItem_Click(object sender, EventArgs e)
