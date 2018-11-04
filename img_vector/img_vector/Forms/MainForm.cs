@@ -74,6 +74,7 @@ namespace img_vector
             InitializeComponent();
             imageList = new ImageListForm();
             imageList.VisibleChanged += ImageList_VisibleChanged;
+            imageList.SelectedImageChanged += ImageList_SelectedImageChanged;
         }
 
         private void ImageList_VisibleChanged(object sender, EventArgs e)
@@ -83,6 +84,22 @@ namespace img_vector
             {
                 viewImageListToolStripMenuItem.Checked = false;
             }
+        }
+
+        private void ImageList_SelectedImageChanged(object sender, EventArgs e)
+        {
+            this.currentImageClassificationIndex = imageList.SelectedIndex; // Set the index of the current image classification to the selected image classification.
+            currentVectorIndex = this.currentImageClassification.vectors.Count - 1; // Set the vector being worked on to the last vector created.
+            currentZoomLevel = 100; // Reset the zoom level back to 100.
+            zoomStatusLabel.Text = $"Zoom: {currentZoomLevel}%"; // Set the zoom status label to reflect this.
+
+            if (currentImagePictureBox.Image != null)
+            {
+                currentImagePictureBox.Image.Dispose();
+            }
+            currentImagePictureBox.Size = currentImageClassification.image.Size; // Set the size of the picturebox to the size of the image to be displayed.
+            currentImagePictureBox.Image = new Bitmap(currentImageClassification.image); // Set the image being displayed.
+            currentImagePictureBox.Refresh();
         }
 
         private void currentImagePictureBox_MouseClick(object sender, MouseEventArgs e)
@@ -314,20 +331,23 @@ namespace img_vector
 
         private void mainForm_DragDrop(object sender, DragEventArgs e)
         {
-            string file = ((string[])e.Data.GetData(DataFormats.FileDrop))[0];
-            switch(Path.GetExtension(file).ToLower())
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (string file in files)
             {
-                case ".xml":
-                    this.settings = Settings.fromFilepath(file);
-                    break;
-                case ".jpg":
-                case ".jpeg":
-                case ".png":
-                case ".bmp":
-                case ".gif":
-                case ".tif":
-                    LoadImage(new Bitmap(file), file);
-                    break;
+                switch (Path.GetExtension(file).ToLower())
+                {
+                    case ".xml":
+                        this.settings = Settings.fromFilepath(file);
+                        break;
+                    case ".jpg":
+                    case ".jpeg":
+                    case ".png":
+                    case ".bmp":
+                    case ".gif":
+                    case ".tif":
+                        LoadImage(new Bitmap(file), file);
+                        break;
+                }
             }
         }
 

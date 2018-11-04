@@ -15,6 +15,13 @@ namespace img_vector.Forms
         readonly Size thumbnailBoxSize = new Size(150, 75);
         readonly Size thumbnailLabelSize = new Size(150, 13);
 
+        ImageList loadedImageList = new ImageList();
+
+        public event EventHandler SelectedImageChanged;
+        bool suppressSelectedImageChanged = false;
+
+        public int SelectedIndex { get { return imageListView.Items.IndexOf(imageListView.SelectedItems[0]); } set { imageListView.Items[value].Selected = true; } }
+
         /// <summary>
         /// Y Position for the next element set representing an image thumbnail.
         /// </summary>
@@ -43,11 +50,23 @@ namespace img_vector.Forms
         public ImageListForm()
         {
             InitializeComponent();
+
+            loadedImageList.ImageSize = thumbnailBoxSize;
+            imageListView.LargeImageList = loadedImageList;
+            imageListView.SmallImageList = loadedImageList;
         }
 
         public void AddNewImage(Image image, string filepath)
         {
+            suppressSelectedImageChanged = true;
+            loadedImageList.Images.Add(image);
+            int newImageIndex = loadedImageList.Images.Count - 1;
+            imageListView.Items.Add(new ListViewItem { ImageIndex = newImageIndex, Text = filepath });
+            imageListView.Items[imageListView.Items.Count - 1].Selected = true;
+            suppressSelectedImageChanged = false;
+
             /// PictureBox setup
+            /*
             PictureBox pb = new PictureBox();
             pb.Location = new Point(newThumbnail_X_Position, newControl_Y_Position);
             pb.Size = thumbnailBoxSize; // Set the size of the picturebox to be thumbnail sized.
@@ -68,7 +87,7 @@ namespace img_vector.Forms
 
             // Add the picturebox and label to the controls
             Controls.Add(pb);
-            Controls.Add(label);
+            Controls.Add(label);*/
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -84,6 +103,15 @@ namespace img_vector.Forms
             {
                 e.Cancel = true;
                 this.Hide(); // Opt to hide the image list window instead of closing it.
+            }
+        }
+
+        private void imageListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            EventHandler eventHandler = SelectedImageChanged;
+            if (eventHandler != null && !suppressSelectedImageChanged && imageListView.SelectedIndices.Count > 0)
+            {
+                eventHandler(this, e);
             }
         }
     }
