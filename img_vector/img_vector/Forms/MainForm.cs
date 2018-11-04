@@ -37,7 +37,7 @@ namespace img_vector
         /// <summary>
         /// Image classification currently being worked on.
         /// </summary>
-        ImageClassification currentImageClassification => imageClassifications[currentImageClassificationIndex];
+        ImageClassification currentImageClassification => imageClassifications.Count > 0 && currentImageClassificationIndex >= 0 ? imageClassifications[currentImageClassificationIndex] : null;
 
         /// <summary>
         /// Index of the vector currently being worked on.
@@ -47,7 +47,7 @@ namespace img_vector
         /// <summary>
         /// The vector currently being worked on.
         /// </summary>
-        Vector currentVector => currentImageClassification.vectors[currentVectorIndex];
+        Vector currentVector => currentImageClassification.vectors.Count > 0 && currentVectorIndex >= 0 ? currentImageClassification.vectors[currentVectorIndex] : null;
 
         /// <summary>
         /// Program settings.
@@ -118,15 +118,21 @@ namespace img_vector
                 {
                     if (!CursorIsInAnyPoint(e.X, e.Y)) // Don't add a new point if we're already inside of one.
                     {
-                        currentVector.points.Add(new Point((int)(e.X / (currentZoomLevel/100.0f)), (int)(e.Y / (currentZoomLevel/100.0f))));
+                        if (currentVector != null) // If a vector has been created
+                        {
+                            currentVector.points.Add(new Point((int)(e.X / (currentZoomLevel / 100.0f)), (int)(e.Y / (currentZoomLevel / 100.0f))));
+                        }
                     }
                 }
                 else if(e.Button == MouseButtons.Right) // Right button : Delete closest point if a point is within a certain radius
                 {
-                    int index = currentVector.points.FindIndex(point => CursorIsInPoint(new Point((int)(point.X * currentZoomLevel/100.0f), (int)(point.Y * currentZoomLevel/100.0f)), e.X, e.Y));
-                    if (index > -1) // The cursor is actually in a point
+                    if (currentVector != null && currentVector.points.Count > 0) // If a vector has been created and has at least one point
                     {
-                        currentVector.points.RemoveAt(index);
+                        int index = currentVector.points.FindIndex(point => CursorIsInPoint(new Point((int)(point.X * currentZoomLevel / 100.0f), (int)(point.Y * currentZoomLevel / 100.0f)), e.X, e.Y));
+                        if (index > -1) // The cursor is actually in a point
+                        {
+                            currentVector.points.RemoveAt(index);
+                        }
                     }
                 }
 
@@ -158,9 +164,9 @@ namespace img_vector
 
         private bool CursorIsInAnyPoint(int X, int Y)
         {
-            if (pictureLoaded)
+            if (pictureLoaded) // An image has been loaded for classification
             {
-                foreach (Vector v in currentImageClassification.vectors) // TODO: Optimize this O(n^2) loop
+                foreach (Vector v in currentImageClassification.vectors) // TODO: Optimize this O(n^2) loop, if possible.
                 {
                     foreach (Point p in v.points)
                     {
@@ -177,12 +183,11 @@ namespace img_vector
 
         private void currentImagePictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            // If the mouse is on (within) a point, change the cursor to a finger.
-            if(CursorIsInAnyPoint(e.X, e.Y))
+            if(CursorIsInAnyPoint(e.X, e.Y))  // If the mouse is on (within) a point, change the cursor to a hand with a pointing finger.
             {
                 Cursor.Current = Cursors.Hand;
             }
-            else
+            else // Default the cursor back to a normal arrow otherwise.
             {
                 Cursor.Current = Cursors.Arrow;
             }
@@ -203,11 +208,16 @@ namespace img_vector
             }
         }
 
+        /// <summary>
+        /// Event called upon user selecting File->Open->Image
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void imageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog fileDialog = new OpenFileDialog())
             {
-                fileDialog.Filter = "Bitmaps|*.bmp|" +
+                fileDialog.Filter = "Bitmaps|*.bmp|" + // Filter for all types of image files, with an option to select a file with an extension not included.
                                     "PNG files|*.png|" +
                                     "JPEG files|*.jpg|" +
                                     "GIF files|*.gif|" +
@@ -215,16 +225,13 @@ namespace img_vector
                                     "Image files|*.bmp;*.jpg;*.gif;*.png;*.tif|" +
                                     "All files|*.*";
 
-                if(fileDialog.ShowDialog() == DialogResult.OK)
+                if(fileDialog.ShowDialog() == DialogResult.OK) // The user has selected a file to open and clicked OK
                 {
                     try
                     {
-                        using (Image i = Image.FromStream(fileDialog.OpenFile()))
-                        {
-                            LoadImage(i, fileDialog.FileName);
-                        }
+                        LoadImage(fileDialog.FileName, displayNewImage: true);
                     }
-                    catch (Exception error)
+                    catch (Exception error) // If the user chose a file that isn't an image file, or somehow selected a file that doesn't exist, we'll catch the error and display it to the user.
                     {
                         MessageBox.Show("Error", error.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
@@ -236,19 +243,18 @@ namespace img_vector
         /// Loads a new image into the picture box.
         /// </summary>
         /// <param name="newImage">New image to be displayed via the picture box.</param>
-        private void LoadImage(Image newImage, string filePath)
+        private void LoadImage(string filePath, bool displayNewImage)
         {
             this.imageClassifications.Add(new ImageClassification(filePath)); // Add a new image classification object to the list.
             this.currentImageClassificationIndex = this.imageClassifications.Count - 1; // Set the current image classification index to the new classification object.
-
             this.currentVectorIndex = 0; // Reset the current vector.
 
-            using (ClassificationQueryForm classificationQuery = new ClassificationQueryForm(CancelEnabled: false)) // Query for the classification of the first vector in this object.
+            using (Image newImage = Image.FromFile(filePath))
             {
-                if (classificationQuery.ShowDialog() == DialogResult.OK) // User should not be able to click "Cancel", but everything after the load will be placed within this check
-                {
-                    currentImageClassification.vectors.Add(new Vector(classificationQuery.Classification)); // Add the first vector to the new image classification object.
+                imageList.AddNewImage(newImage, filePath); // Add a new image to the image list.
 
+                if (displayNewImage)
+                {
                     this.currentZoomLevel = 100; // Reset the zoom level.
                     zoomStatusLabel.Text = $"Zoom: {currentZoomLevel}%"; // Reset the zoom status label.
 
@@ -263,8 +269,6 @@ namespace img_vector
                     }
 
                     this.currentImagePictureBox.Size = this.currentImageClassification.imageSize; // Set the size of the picture box so that it can display the entire image.
-
-                    imageList.AddNewImage(newImage, filePath); // Add a new image to the image list.
 
                     this.Activate();
                 }
@@ -313,12 +317,11 @@ namespace img_vector
             // Clear all added points.
             if(imageClassifications.Count > 0)
             {
-                using (ClassificationQueryForm classificationQueryForm = new ClassificationQueryForm())
+                if(currentImageClassification.vectors.Count > 0)
                 {
-                    if(classificationQueryForm.ShowDialog() == DialogResult.OK) // User OK'd the new classification, is going through with resetting all vectors
+                    if(MessageBox.Show("Are you sure you wish to delete all classified vectors for this image?", "Please confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                     {
                         currentImageClassification.vectors.Clear();
-                        currentImageClassification.vectors.Add(new Vector(classificationQueryForm.Classification));
                         this.currentVectorIndex = 0;
                         this.currentImagePictureBox.Refresh();
                     }
@@ -341,8 +344,10 @@ namespace img_vector
         private void mainForm_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (string file in files)
+            for(int i=0; i<files.Length; i++)
             {
+                string file = files[i];
+
                 switch (Path.GetExtension(file).ToLower())
                 {
                     case ".xml":
@@ -354,10 +359,7 @@ namespace img_vector
                     case ".bmp":
                     case ".gif":
                     case ".tif":
-                        using (Image i = Image.FromFile(file))
-                        {
-                            LoadImage(i, file);
-                        }
+                        LoadImage(file, displayNewImage: i == files.Length - 1);
                         break;
                 }
             }
@@ -368,26 +370,26 @@ namespace img_vector
         /// </summary>
         private void AddNewVector()
         {
-            if (pictureLoaded)
+            if (pictureLoaded) // An image has been loaded for classification
             {
-                if (currentImageClassification.vectors.Count > 0)
+                if (currentVector != null && currentVector.points.Count <= 0)  // User tried to create a new vector when the current one is blank.
                 {
-                    if (currentVector.points.Count > 0)
+                    MessageBox.Show("Your current vector is blank. You must add some points before creating a new vector.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                using (ClassificationQueryForm classificationQuery = new ClassificationQueryForm())
+                {
+                    if (currentVector != null) // If a vector has already been created
                     {
-                        using (ClassificationQueryForm classificationQuery = new ClassificationQueryForm())
-                        {
-                            classificationQuery.Classification = currentVector.classification; // Default the classification being presented to be the last classification entered.
-                            classificationQuery.Activate();
-                            if (classificationQuery.ShowDialog() == DialogResult.OK) // If the user clicked "OK"
-                            {
-                                currentImageClassification.vectors.Add(new Vector(classificationQuery.Classification)); // Then add the newest vector, with the classification the user entered.
-                                currentVectorIndex = currentImageClassification.vectors.Count - 1; // Set the current vector to be the newest one.
-                            }
-                        }
+                        classificationQuery.Classification = currentVector.classification; // Default the classification being presented to be the last classification entered.
                     }
-                    else // User tried to create a new vector when the current one is blank.
+                    classificationQuery.Activate(); // Activate the classification query form so the user can just type and press enter instead of having to click the query form first
+
+                    if (classificationQuery.ShowDialog() == DialogResult.OK) // If the user clicked "OK"
                     {
-                        MessageBox.Show("Your current vector is blank. You must add some points before creating a new vector.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        currentImageClassification.vectors.Add(new Vector(classificationQuery.Classification)); // Then add the new vector, with the classification the user entered.
+                        currentVectorIndex = currentImageClassification.vectors.Count - 1; // Set the current vector to be the new vector.
                     }
                 }
             }
@@ -395,7 +397,7 @@ namespace img_vector
             {
                 MessageBox.Show("You must load an image before creating a vector.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            this.Activate();
+            this.Activate(); // Bring focus back to this form.
         }
 
         private void newVectorToolStripMenuItem_Click(object sender, EventArgs e)

@@ -22,6 +22,9 @@ namespace img_vector.Forms
 
         public int SelectedIndex { get { return imageListView.Items.IndexOf(imageListView.SelectedItems[0]); } set { imageListView.Items[value].Selected = true; } }
 
+
+        int desiredSelectionIndex = -1;
+
         /// <summary>
         /// Y Position for the next element set representing an image thumbnail.
         /// </summary>
@@ -58,36 +61,22 @@ namespace img_vector.Forms
 
         public void AddNewImage(Image image, string filepath)
         {
-            suppressSelectedImageChanged = true;
-            loadedImageList.Images.Add(new Bitmap(image, thumbnailBoxSize));
-            int newImageIndex = loadedImageList.Images.Count - 1;
-            imageListView.Items.Add(new ListViewItem { ImageIndex = newImageIndex, Text = filepath });
-            imageListView.Items[imageListView.Items.Count - 1].Selected = true;
-            suppressSelectedImageChanged = false;
+            suppressSelectedImageChanged = true; // Prevent any selection change events from being raised while loading new images
 
-            /// PictureBox setup
-            /*
-            PictureBox pb = new PictureBox();
-            pb.Location = new Point(newThumbnail_X_Position, newControl_Y_Position);
-            pb.Size = thumbnailBoxSize; // Set the size of the picturebox to be thumbnail sized.
-            pb.SizeMode = PictureBoxSizeMode.StretchImage; // Resizes the image to fit the picturebox as a thumbnail instead of the full image.
-            pb.Image = image; // Set the image being shown inside of the picturebox.
+            loadedImageList.Images.Add(new Bitmap(image, thumbnailBoxSize)); // Add the new image to the image list
+            int newImageIndex = loadedImageList.Images.Count - 1; // Get the index of the image loaded into the image list.
+            imageListView.Items.Add(new ListViewItem { ImageIndex = newImageIndex, Text = filepath }); // Add the new item to the listview control
 
-            newControl_Y_Position += label_Y_Position_Relative_To_Thumbnail; // Increment the y position for the label.
+            if (this.Visible) // Only update the selection if this control is visible.
+            {
+                imageListView.Items[imageListView.Items.Count - 1].Selected = true; // Set this item as selected, since it is the latest item added.
+            }
+            else
+            {
+                desiredSelectionIndex = imageListView.Items.Count - 1;
+            }
 
-            /// Label setup
-            Label label = new Label();
-            label.Location = new Point(newLabel_X_Position, newControl_Y_Position);
-            label.AutoSize = false; // Disable autosizing of the label from making the label too long for long filepaths
-            label.Size = thumbnailLabelSize; // Set the size of the label
-            label.AutoEllipsis = true; // If the text in the label is too long, it will shorten it and append "..."
-            label.Text = filepath; // Set the text to be the path of the file.
-
-            newControl_Y_Position += nextPicture_Y_Position_Relative_To_Last_Label;
-
-            // Add the picturebox and label to the controls
-            Controls.Add(pb);
-            Controls.Add(label);*/
+            suppressSelectedImageChanged = false; // Image load finished, re-allow selection change events.
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -112,6 +101,15 @@ namespace img_vector.Forms
             if (eventHandler != null && !suppressSelectedImageChanged && imageListView.SelectedIndices.Count > 0)
             {
                 eventHandler(this, e);
+            }
+        }
+
+        private void ImageListForm_Shown(object sender, EventArgs e)
+        {
+            if(desiredSelectionIndex >= 0)
+            {
+                imageListView.Items[desiredSelectionIndex].Selected = true;
+                desiredSelectionIndex = -1;
             }
         }
     }

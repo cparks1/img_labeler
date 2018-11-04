@@ -62,6 +62,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "ImageListForm";
             this.Text = "Images";
+            this.Shown += new System.EventHandler(this.ImageListForm_Shown);
             this.ResumeLayout(false);
 
         }
