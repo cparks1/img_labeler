@@ -97,8 +97,12 @@ namespace img_vector
             {
                 currentImagePictureBox.Image.Dispose();
             }
-            currentImagePictureBox.Size = currentImageClassification.image.Size; // Set the size of the picturebox to the size of the image to be displayed.
-            currentImagePictureBox.Image = new Bitmap(currentImageClassification.image); // Set the image being displayed.
+            currentImagePictureBox.Size = currentImageClassification.imageSize; // Set the size of the picturebox to the size of the image to be displayed.
+
+            using (Image i = currentImageClassification.WorkingImage())
+            {
+                currentImagePictureBox.Image = new Bitmap(i); // Set the image being displayed.
+            }
             currentImagePictureBox.Refresh();
         }
 
@@ -215,7 +219,10 @@ namespace img_vector
                 {
                     try
                     {
-                        LoadImage(new Bitmap(fileDialog.OpenFile()), fileDialog.FileName);
+                        using (Image i = Image.FromStream(fileDialog.OpenFile()))
+                        {
+                            LoadImage(i, fileDialog.FileName);
+                        }
                     }
                     catch (Exception error)
                     {
@@ -228,8 +235,7 @@ namespace img_vector
         /// <summary>
         /// Loads a new image into the picture box.
         /// </summary>
-        /// <param name="newImage">New image to be displayed via the picture box.
-        /// </param>
+        /// <param name="newImage">New image to be displayed via the picture box.</param>
         private void LoadImage(Image newImage, string filePath)
         {
             this.imageClassifications.Add(new ImageClassification(filePath)); // Add a new image classification object to the list.
@@ -251,9 +257,12 @@ namespace img_vector
                         this.currentImagePictureBox.Image.Dispose();
                     }
 
-                    this.currentImagePictureBox.Image = new Bitmap(this.currentImageClassification.image); // Show the new image
+                    using (Image i = this.currentImageClassification.WorkingImage())
+                    {
+                        this.currentImagePictureBox.Image = new Bitmap(i); // Show the new image
+                    }
 
-                    this.currentImagePictureBox.Size = this.currentImageClassification.image.Size; // Set the size of the picture box so that it can display the entire image.
+                    this.currentImagePictureBox.Size = this.currentImageClassification.imageSize; // Set the size of the picture box so that it can display the entire image.
 
                     imageList.AddNewImage(newImage, filePath); // Add a new image to the image list.
 
@@ -345,7 +354,10 @@ namespace img_vector
                     case ".bmp":
                     case ".gif":
                     case ".tif":
-                        LoadImage(new Bitmap(file), file);
+                        using (Image i = Image.FromFile(file))
+                        {
+                            LoadImage(i, file);
+                        }
                         break;
                 }
             }
@@ -486,7 +498,11 @@ namespace img_vector
                 float zoomScaleFactor = currentZoomLevel / 100.0f;
 
                 currentImagePictureBox.Image.Dispose();
-                currentImagePictureBox.Image = new Bitmap(currentImageClassification.image, new Size((int)(currentImageClassification.image.Width * zoomScaleFactor), (int)(currentImageClassification.image.Height * zoomScaleFactor)));
+
+                using (Image i = currentImageClassification.WorkingImage())
+                {
+                    currentImagePictureBox.Image = new Bitmap(i, new Size((int)(currentImageClassification.imageSize.Width * zoomScaleFactor), (int)(currentImageClassification.imageSize.Height * zoomScaleFactor)));
+                }
                 currentImagePictureBox.Size = currentImagePictureBox.Image.Size;
 
                 zoomStatusLabel.Text = $"Zoom: {currentZoomLevel.ToString()}%";

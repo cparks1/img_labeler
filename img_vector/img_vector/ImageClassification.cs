@@ -21,8 +21,15 @@ namespace img_vector
         /// <summary>
         /// Image being classified.
         /// </summary>
-        [JsonIgnore] // Don't want to try to encode the image into the JSON or XML file. It can't anyways.
-        public readonly Image image;
+        public Image WorkingImage()
+        {
+            return Image.FromFile(imagePath);
+        }
+
+        /// <summary>
+        /// Size of the image being classified.
+        /// </summary>
+        public readonly Size imageSize;
 
         /// <summary>
         /// Classification vectors of the image.
@@ -49,7 +56,10 @@ namespace img_vector
         public ImageClassification(string imagePath) : this()
         {
             this.imagePath = imagePath;
-            this.image = Image.FromFile(imagePath);
+            using (Image i = WorkingImage())
+            {
+                this.imageSize = i.Size;
+            }
         }
 
         #endregion Constructors
@@ -65,7 +75,7 @@ namespace img_vector
             for(int i=0; i < this.vectors.Count; i++)
             {
                 Vector v = this.vectors[i];
-                using (Bitmap b = new Bitmap(this.image.Width, this.image.Height))
+                using (Bitmap b = new Bitmap(this.imageSize.Width, this.imageSize.Height))
                 {
                     using (Graphics g = Graphics.FromImage(b))
                     {

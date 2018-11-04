@@ -27,7 +27,7 @@ namespace img_vector
 
         public static ClassifiedSerializedPNGMask FromVectorAndClassifier(Vector classifiedVector, ImageClassification classifier)
         {
-            return new ClassifiedSerializedPNGMask(classifiedVector, classifier.image.Size);
+            return new ClassifiedSerializedPNGMask(classifiedVector, classifier.imageSize);
         }
 
         public static List<ClassifiedSerializedPNGMask> MasksFromImageClassification(ImageClassification classification)

@@ -59,7 +59,7 @@ namespace img_vector.Forms
         public void AddNewImage(Image image, string filepath)
         {
             suppressSelectedImageChanged = true;
-            loadedImageList.Images.Add(image);
+            loadedImageList.Images.Add(new Bitmap(image, thumbnailBoxSize));
             int newImageIndex = loadedImageList.Images.Count - 1;
             imageListView.Items.Add(new ListViewItem { ImageIndex = newImageIndex, Text = filepath });
             imageListView.Items[imageListView.Items.Count - 1].Selected = true;
