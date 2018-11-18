@@ -99,20 +99,21 @@
             // imageToolStripMenuItem
             // 
             this.imageToolStripMenuItem.Name = "imageToolStripMenuItem";
-            this.imageToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.imageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.imageToolStripMenuItem.Text = "Image";
             this.imageToolStripMenuItem.Click += new System.EventHandler(this.imageToolStripMenuItem_Click);
             // 
             // directoryToolStripMenuItem
             // 
             this.directoryToolStripMenuItem.Name = "directoryToolStripMenuItem";
-            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.directoryToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.directoryToolStripMenuItem.Text = "Directory";
+            this.directoryToolStripMenuItem.Click += new System.EventHandler(this.directoryToolStripMenuItem_Click);
             // 
             // openSettingsToolStripMenuItem
             // 
             this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
-            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openSettingsToolStripMenuItem.Text = "Settings";
             this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.openSettingsToolStripMenuItem_Click);
             // 
@@ -128,14 +129,14 @@
             // saveSettingsToolStripMenuItem
             // 
             this.saveSettingsToolStripMenuItem.Name = "saveSettingsToolStripMenuItem";
-            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveSettingsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.saveSettingsToolStripMenuItem.Text = "Settings";
             this.saveSettingsToolStripMenuItem.Click += new System.EventHandler(this.saveSettingsToolStripMenuItem_Click);
             // 
             // saveVectorsToolStripMenuItem
             // 
             this.saveVectorsToolStripMenuItem.Name = "saveVectorsToolStripMenuItem";
-            this.saveVectorsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveVectorsToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.saveVectorsToolStripMenuItem.Text = "Classification Data";
             this.saveVectorsToolStripMenuItem.Click += new System.EventHandler(this.saveVectorsToolStripMenuItem_Click);
             // 

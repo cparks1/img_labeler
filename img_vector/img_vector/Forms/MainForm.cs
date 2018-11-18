@@ -121,6 +121,8 @@ namespace img_vector
                         if (currentVector != null) // If a vector has been created
                         {
                             currentVector.points.Add(new Point((int)(e.X / (currentZoomLevel / 100.0f)), (int)(e.Y / (currentZoomLevel / 100.0f))));
+
+                            UpdateImageListThumbnail();
                         }
                     }
                 }
@@ -132,11 +134,26 @@ namespace img_vector
                         if (index > -1) // The cursor is actually in a point
                         {
                             currentVector.points.RemoveAt(index);
+
+                            UpdateImageListThumbnail();
                         }
                     }
                 }
 
                 currentImagePictureBox.Refresh();
+            }
+        }
+
+        /// <summary>
+        /// Updates the thumbnail of the current working image in the imagelistform.
+        /// </summary>
+        private void UpdateImageListThumbnail()
+        {
+            using (Bitmap newThumbnail = new Bitmap(currentImageClassification.imagePath)) // Work from the original image instead of the currently shown image in case there is a high zoom level (to save on memory usage)
+            {
+                Graphics g = Graphics.FromImage(newThumbnail); // Get a graphics object to draw with
+                DrawCurrentImageVectors(g, 1); // Draw the vectors onto the image, with no scaling, since we're working from the original image.
+                imageList.ModifyCurrentImageThumbnail(newThumbnail);
             }
         }
 
@@ -192,20 +209,33 @@ namespace img_vector
                 Cursor.Current = Cursors.Arrow;
             }
 
-            mousePositionStatusLabel.Text = $"({(int)(e.X / (currentZoomLevel / 100.0f))}, {(int)(e.Y / (currentZoomLevel / 100.0f))})";
+            mousePositionStatusLabel.Text = $"({(int)(e.X / (currentZoomLevel / 100.0f))}, {(int)(e.Y / (currentZoomLevel / 100.0f))})"; // Ex: (1235, 1904)
+        }
+
+        /// <summary>
+        /// Draws all the vectors for the current image, using the given graphics object and scaling factor.
+        /// </summary>
+        /// <param name="g">Graphics object to draw with.</param>
+        /// <param name="scaleFactor">Optional parameter that defaults to the current zoom level divided by 100 (to get a percent scale) if not specified, or if set to -1.</param>
+        private void DrawCurrentImageVectors(Graphics g, float scaleFactor = -1)
+        {
+            if(scaleFactor == -1)
+            {
+                scaleFactor = currentZoomLevel / 100.0f;
+            }
+
+            if(pictureLoaded)
+            {
+                foreach(Vector v in currentImageClassification.vectors)
+                {
+                    v.DrawVector(settings, g, scaleFactor);
+                }
+            }
         }
 
         private void currentImagePictureBox_Paint(object sender, PaintEventArgs e)
         {
-            // This function paints all the vector points, lines, and vector area shading.
-
-            if (pictureLoaded)
-            {
-                foreach(Vector v in currentImageClassification.vectors)
-                {
-                    v.DrawVector(settings, e.Graphics, scaleFactor: currentZoomLevel/100.0f);
-                }
-            }
+            DrawCurrentImageVectors(e.Graphics);
         }
 
         /// <summary>
@@ -363,6 +393,16 @@ namespace img_vector
                         break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Event called upon user clicking File -> Open -> Directory
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void directoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
         /// <summary>

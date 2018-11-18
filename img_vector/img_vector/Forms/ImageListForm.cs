@@ -12,7 +12,7 @@ namespace img_vector.Forms
 {
     public partial class ImageListForm : Form
     {
-        readonly Size thumbnailBoxSize = new Size(150, 75);
+        public static readonly Size thumbnailBoxSize = new Size(150, 75);
         readonly Size thumbnailLabelSize = new Size(150, 13);
 
         ImageList loadedImageList = new ImageList();
@@ -77,6 +77,19 @@ namespace img_vector.Forms
             }
 
             suppressSelectedImageChanged = false; // Image load finished, re-allow selection change events.
+        }
+
+        /// <summary>
+        /// Updates the thumbnail of the image currently being worked on.
+        /// </summary>
+        /// <param name="newThumbnail">New thumbnail to show.</param>
+        public void ModifyCurrentImageThumbnail(Image newThumbnail)
+        {
+            if (SelectedIndex > -1)
+            {
+                loadedImageList.Images[SelectedIndex].Dispose();
+                loadedImageList.Images[SelectedIndex] = new Bitmap(newThumbnail, thumbnailBoxSize);
+            }
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
